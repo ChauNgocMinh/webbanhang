@@ -1,0 +1,36 @@
+﻿@using WebBanHang.ViewModels
+@model List<RoleVM>
+@{
+    Layout = "_Layout";
+}
+<h3><a asp-action="Create">Create</a></h3>
+
+<h3>Search Role by Name</h3>
+<hr />
+<form asp-action="Search" method="post">
+    Name: <input name="keyword" />
+    <input type="submit" value="Search" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Role ID</th>
+            <th>Role Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td>@role.RoleId</td>
+                <td>@role.RoleName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@role.RoleId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@role.RoleId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@role.RoleId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

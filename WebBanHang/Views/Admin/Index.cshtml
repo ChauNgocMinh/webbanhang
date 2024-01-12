@@ -1,0 +1,74 @@
+﻿@using WebBanHang.ViewModels
+@model List<UserWithRoleVM>
+@{
+    Layout = "_Layout";
+}
+
+<style>
+    /* Thanh tìm kiếm */
+    .search-container {
+        margin-bottom: 20px;
+    }
+
+    .search-container input {
+        border-radius: 5px 0 0 5px;
+    }
+
+    .search-container button {
+        border-radius: 0 5px 5px 0;
+    }
+
+    /* Nút tạo người dùng */
+    .create-button {
+        text-align: right;
+    }
+
+    .create-button a {
+        border-radius: 5px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row search-container">
+        <div class="col-md-8">
+            <form asp-action="Search" method="post">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="keyword" placeholder="Enter user name" />
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4 create-button">
+            <a asp-action="Create" class="btn btn-success">Create User</a>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Email</td>
+                    <td>@string.Join(", ", user.Roles)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,86 @@
+﻿@model IEnumerable<WebBanHang.Models.Product>
+
+@{
+    ViewData["Title"] = "Product Index";
+}
+
+<style>
+    .search-container {
+        margin-bottom: 20px;
+    }
+
+    .table img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .action-links a {
+        margin-right: 10px;
+    }
+
+    .create-button {
+        margin-bottom: 20px;
+        text-align: right;
+    }
+
+    /* Responsive table styling */
+    @@media (max-width: 767px) {
+        .table th, .table td {
+            text-align: center;
+        }
+
+        .action-links {
+            text-align: center;
+            margin-top: 10px; /* Adjust margin for better spacing */
+        }
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="search-container">
+        <form asp-action="Search" method="post">
+            <div class="input-group">
+                <input type="text" class="form-control" name="keyword" placeholder="Enter product name" />
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @await Component.InvokeAsync("Menu")
+
+    <div class="create-button">
+        <a asp-action="Create" class="btn btn-success">Tạo sản phẩm mới</a>
+    </div>
+
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Image)</th>
+                <th>@Html.DisplayNameFor(model => model.Price)</th>
+                <th>@Html.DisplayNameFor(model => model.Number)</th>
+                <th>@Html.DisplayNameFor(model => model.Menu)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td><img src="~/image/Product/@item.Image" width="100px" alt="@item.Name" /></td>
+                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Number)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Menu.Name)</td>
+                    <td class="action-links">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

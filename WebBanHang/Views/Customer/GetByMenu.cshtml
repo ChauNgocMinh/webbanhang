@@ -1,0 +1,91 @@
+﻿@model Tuple<IEnumerable<Product>, IEnumerable<Menu>>
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    .product_container {
+        display: flex;
+    }
+
+    .card {
+        margin-right: 10px;
+        width: 18rem;
+    }
+
+    .product-table {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .product-table td {
+            padding: 10px;
+        }
+
+    .menu-table {
+        float: left;
+        width: 100%;
+    }
+
+        .menu-table td {
+            padding: 10px;
+        }
+
+    .form-inline {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+</style>
+
+<form class="form-inline" asp-action="Search" method="post">
+    <div class="input-group" style="width: 80%">
+        <input type="text" class="form-control" name="keyword" placeholder="Tìm theo sản phẩm" />
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="container mt-4">
+    <main role="main" class="pb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="menu-table">
+                    <table class="table table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th style="display: flex; justify-content: center;">Danh mục</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var menu in Model.Item2)
+                            {
+                                <tr>
+                                    <td><a class="dropdown-item" asp-action="GetByMenu" asp-route-id="@menu.Id">@menu.Name</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="product_container row">
+                    @foreach (var item in Model.Item1)
+                    {
+                        <div class="card col-md-3 mb-4" style="width: 18rem;">
+                            <img src="~/image/Product/@item.Image" class="card-img-top" alt="@item.Name">
+                            <div class="card-body d-flex flex-column">
+                                <a class="card-text" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
+                                <h5 class="card-title">$@item.Price.00</h5>
+                                <a class="btn btn-primary mt-auto" asp-action="AddItemToCart" asp-route-id="@item.Id">Add to cart</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+

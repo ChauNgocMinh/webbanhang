@@ -1,0 +1,137 @@
+﻿@model WebBanHang.Models.Product
+
+<style>
+    .product_info_container {
+        display: flex;
+        margin: 20px;
+    }
+
+        .product_info_container img {
+            width: 400px;
+            margin-right: 50px;
+        }
+
+    .info_container {
+        max-width: 600px;
+    }
+
+    .name_product_title {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    .price_product_title {
+        color: #f1425d;
+        font-size: 25px;
+        margin-bottom: 20px;
+    }
+
+    .block_quantity {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .text_specification {
+        margin-right: 10px;
+    }
+
+    .block_quantity__number {
+        width: 52px;
+        height: 46px;
+        border: 1px solid #ddd;
+        font-size: 18px;
+        margin-right: 10px;
+        padding: 5px;
+    }
+
+    .button_container {
+        display: flex;
+        justify-content: space-between
+    }
+
+    .add_to_cart_button,
+    .checkout_button {
+        font-size: 20px;
+        width: 40%;
+        margin-top: 20px;
+        padding: 10px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        background-color: #f1425d;
+        color: #fff;
+        transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: black;
+        text-decoration: none;
+    }
+
+    .add_to_cart_button:hover,
+    .checkout_button:hover {
+        background-color: #d23c57;
+        color: black;
+    }
+</style>
+
+<form>
+    <div class="product_info_container">
+        <img src="~/image/Product/@Model.Image" />
+        <div class="info_container">
+            <div class="name_product_title">@Model.Name</div>
+            <h5 class="price_product_title">$@Model.Price.00</h5>
+            <div class="block_quantity">
+                <span class="text_specification">Quantity</span>
+                <div class="block_quantity__chooseBlock">
+                    <input class="block_quantity__number" name="quantityNumber" type="number" min="0" value="1" />
+                </div>
+            </div>
+            <div class="button_container">
+                <a class="add_to_cart_button" onclick="addToCart()">
+                    <span>THÊM GIỎ HÀNG</span>
+                </a>
+                <a class="checkout_button" onclick="buyNow()">
+                    <span>MUA NGAY</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    
+
+    function addToCart() { 
+        var qty = $('.block_quantity__number').val();
+        var productId = '@Model.Id';
+        $.ajax({
+            type: 'GET',
+            url: '/OrderDetails/Create',
+            data: {
+                productId: productId,
+                qty: qty
+            }
+        })
+    };
+    function buyNow() {
+        var qty = $('.block_quantity__number').val();
+        var productId = '@Model.Id';
+        var price = '@Model.Price';
+        $.ajax({
+            type: 'GET',
+            url: '/Orders/BuyNow',
+            data: {
+                productId: productId,
+                qty: qty,
+                price: price
+            },
+            success: function (response) {
+                console.log(qty+productId+price);
+                window.location.href = '/Orders/BuyNow?productId=' + productId + '&qty=' + qty + '&price=' + price;
+            }
+        })
+    }
+</script>
