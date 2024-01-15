@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace WebBanHang.Models;
 
-namespace WebBanHang.Models
+public class Color
 {
-    public partial class Color
-    {
-        public Color()
-        {
-            DetailColors = new HashSet<DetailColor>();
-        }
+    public Guid Id { get; set; }
+    public string Name { get; set; } = null!;
 
-        public Guid Id { get; set; }
-        public string? Name { get; set; }
-        
-
-        public virtual ICollection<DetailColor> DetailColors { get; set; }
-    }
+    public HashSet<DetailColor> Colors { get; set; } = new();
 }

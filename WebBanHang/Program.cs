@@ -1,29 +1,26 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using WebBanHang.Areas.Identity.Data;
-using WebBanHang.Models;
+using WebBanHang;
+
+
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("WebBanHangContextConnection") ?? throw new InvalidOperationException("Connection string 'WebBanHangContextConnection' not found.");
 
-builder.Services.AddDbContext<WebBanHangContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddAppDbContext(builder);
 
-builder.Services.AddDefaultIdentity<WebBanHangUser>(/*options => options.SignIn.RequireConfirmedAccount = true*/)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<WebBanHangContext>();
+builder.Services.UseIdentity();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
 // Add session 
 builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(60*24);
+    options.IdleTimeout = TimeSpan.FromMinutes(60 * 24);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.ConfigIdentity(builder);
 
 var app = builder.Build();
 
@@ -36,17 +33,23 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
+
 app.UseSession();
-app.UseAuthentication();;
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
+
+await app.ApplyMigrations();
 
 app.Run();
