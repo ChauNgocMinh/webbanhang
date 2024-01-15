@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using WebBanHang.Areas.Identity.Data;
+
+#nullable disable
 
 namespace WebBanHang.Models
 {
@@ -18,24 +17,14 @@ namespace WebBanHang.Models
         {
         }
 
-       
-        public virtual DbSet<Color> Colors { get; set; } = null!;
-        public virtual DbSet<DetailColor> DetailColors { get; set; } = null!;
-        public virtual DbSet<DetailRom> DetailRoms { get; set; } = null!;
-        public virtual DbSet<Menu> Menus { get; set; } = null!;
-        public virtual DbSet<Order> Orders { get; set; } = null!;
-        public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
-        public virtual DbSet<Product> Products { get; set; } = null!;
-        public virtual DbSet<Rom> Roms { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=112.78.2.32;Initial Catalog=mag13134_WebBanHang;User ID=mag13134_mag13134;Password=Hihi1234567!;TrustServerCertificate=True;Persist Security Info=True;");
-            }
-        }
+        public DbSet<Color> Colors { get; set; }
+        public DbSet<DetailColor> DetailColors { get; set; }
+        public DbSet<DetailRom> DetailRoms { get; set; }
+        public DbSet<Menu> Menus { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Rom> Roms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace WebBanHang.Models;
 
-namespace WebBanHang.Models
+public class Menu
 {
-    public partial class Menu
-    {
-        public Menu()
-        {
-            Products = new HashSet<Product>();
-        }
+    public Guid Id { get; set; }
+    public string? Name { get; set; }
 
-        public Guid Id { get; set; }
-        public string? Name { get; set; }
-
-        public virtual ICollection<Product> Products { get; set; }
-    }
+    public List<Product> Products { get; set; } = new();
 }
