@@ -21,7 +21,6 @@
     .navbar{
         padding: 0;
         background-color: #515154;
-
     }
 
     .navbar-nav .nav-item {
@@ -29,7 +28,7 @@
     }
 
     .navbar-nav .nav-link {
-        padding: 20px;
+        padding: 17px;
         transition: background-color 0.3s ease, box-shadow 0.3s ease; 
         color: #fff !important;
     }
@@ -117,15 +116,22 @@
     .collapseShow {
         display: none;
     }
+
+   /*  .footer{
+        background-color: #1d1d1f;
+    } */
+
+    
     @@media(max-width: 992px){
         .collapseShow {
             display: block;
         }
 
         .navbar-nav .nav-link {
-            padding: 19px;
+            padding: 17px;
         }
     }
+
     
 </style>
 <body>
@@ -150,6 +156,15 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Menus" asp-action="Index">Watch</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">Tin tức</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">Dịch vụ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">Khuyến mãi</a>
                         </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
@@ -272,16 +287,107 @@
     </header>
 
 
-    <main style="margin: 64px 0 60px 0;" role="main" class="pb-3">
+    <main style="margin: 57px 0 0 0;" role="main">
             @RenderBody()
     </main>
    
-
-    <footer class="border-top footer text-muted">
-        <div class="container text-center">
-            &copy; 2023 - WebBanHang - <a asp-area="" asp-controller="Customer" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    
+    <div class="">
+        <footer class="text-center text-lg-start text-white"
+                style="background-color: #1c2331">
+            <section class="d-flex justify-content-between p-4"
+                     style="background-color: #6351ce">
+                <div class="me-5">
+                    <span>Liên hệ với chúng tôi:</span>
+                </div>
+                <div>
+                    <a href="" class="text-white me-4">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="" class="text-white me-4">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="" class="text-white me-4">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="" class="text-white me-4">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="" class="text-white me-4">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="" class="text-white me-4">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </section>
+            <section class="">
+                <div class="container text-center text-md-start mt-5">
+                    <div class="row mt-3">
+                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold">Company name</h6>
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto"
+                                style="width: 60px; background-color: #7c4dff; height: 2px" />
+                            <p>
+                                Here you can use rows and columns to organize your footer
+                                content. Lorem ipsum dolor sit amet, consectetur adipisicing
+                                elit.
+                            </p>
+                        </div>
+                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold">Products</h6>
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto"
+                                style="width: 60px; background-color: #7c4dff; height: 2px" />
+                            <p>
+                                <a href="#!" class="text-white">MDBootstrap</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-white">MDWordPress</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-white">BrandFlow</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-white">Bootstrap Angular</a>
+                            </p>
+                        </div>
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <h6 class="text-uppercase fw-bold">Useful links</h6>
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto"
+                                style="width: 60px; background-color: #7c4dff; height: 2px" />
+                            <p>
+                                <a href="#!" class="text-white">Your Account</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-white">Become an Affiliate</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-white">Shipping Rates</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-white">Help</a>
+                            </p>
+                        </div>
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                            <h6 class="text-uppercase fw-bold">Contact</h6>
+                            <hr class="mb-4 mt-0 d-inline-block mx-auto"
+                                style="width: 60px; background-color: #7c4dff; height: 2px" />
+                            <p><i class="fas fa-home mr-3"></i> New York, NY 10012, US</p>
+                            <p><i class="fas fa-envelope mr-3"></i> info@example.com</p>
+                            <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
+                            <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="text-center p-3"
+                 style="background-color: rgba(0, 0, 0, 0.2)">
+                Since:
+                <a class="text-white" >2024</a>
+            </div>
+        </footer>
+    </div>
+    
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

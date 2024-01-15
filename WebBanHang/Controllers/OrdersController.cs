@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Areas.Identity.Data;
-using WebBanHang.Model;
 using WebBanHang.Models;
 using WebBanHang.ViewModels;
 using static NuGet.Packaging.PackagingConstants;

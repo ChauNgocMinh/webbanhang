@@ -232,52 +232,84 @@ namespace WebBanHang.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("WebBanHang.Model.Customer", b =>
-                {
-                    b.Property<Guid>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Avatar")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Dob")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("Customer");
-                });
-
-            modelBuilder.Entity("WebBanHang.Model.Order", b =>
+            modelBuilder.Entity("WebBanHang.Models.Color", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("nchar(255)")
+                        .IsFixedLength();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Color", (string)null);
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.DetailColor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IdColor")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IdProduct")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdColor");
+
+                    b.HasIndex("IdProduct");
+
+                    b.ToTable("DetailColor", (string)null);
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.DetailRom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IdProduct")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IdRom")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdProduct");
+
+                    b.HasIndex("IdRom");
+
+                    b.ToTable("DetailRom", (string)null);
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.Menu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Menu", (string)null);
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
@@ -285,10 +317,8 @@ namespace WebBanHang.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CustomerCode")
-                        .HasColumnType("uniqueidentifier");
+                        .HasPrecision(1)
+                        .HasColumnType("datetime2(1)");
 
                     b.Property<string>("Note")
                         .IsRequired()
@@ -306,18 +336,19 @@ namespace WebBanHang.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerCode");
-
-                    b.ToTable("Order");
+                    b.ToTable("Order", (string)null);
                 });
 
-            modelBuilder.Entity("WebBanHang.Model.OrderDetail", b =>
+            modelBuilder.Entity("WebBanHang.Models.OrderDetail", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid?>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProductId")
@@ -329,32 +360,27 @@ namespace WebBanHang.Migrations
                     b.Property<int?>("Qty")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderDetail");
-                });
-
-            modelBuilder.Entity("WebBanHang.Models.Menu", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<bool?>("Status")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Menu", (string)null);
+                    b.HasIndex(new[] { "OrderId" }, "IX_OrderDetail_OrderId");
+
+                    b.HasIndex(new[] { "ProductId" }, "IX_OrderDetail_ProductId");
+
+                    b.ToTable("OrderDetail", (string)null);
                 });
 
             modelBuilder.Entity("WebBanHang.Models.Product", b =>
                 {
                     b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid?>("IdRom")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Image")
@@ -364,20 +390,35 @@ namespace WebBanHang.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Number")
                         .HasColumnType("int");
 
-                    b.Property<double?>("Price")
+                    b.Property<double?>("OldPrice")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Price")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MenuId");
+                    b.HasIndex(new[] { "MenuId" }, "IX_Product_MenuId");
 
                     b.ToTable("Product", (string)null);
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.Rom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Capacity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rom", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -431,27 +472,49 @@ namespace WebBanHang.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebBanHang.Model.Order", b =>
+            modelBuilder.Entity("WebBanHang.Models.DetailColor", b =>
                 {
-                    b.HasOne("WebBanHang.Model.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("WebBanHang.Models.Color", "IdColorNavigation")
+                        .WithMany("DetailColors")
+                        .HasForeignKey("IdColor")
+                        .HasConstraintName("FK_DetailColor_Color");
 
-                    b.Navigation("Customer");
+                    b.HasOne("WebBanHang.Models.Product", "IdProductNavigation")
+                        .WithMany("DetailColors")
+                        .HasForeignKey("IdProduct")
+                        .HasConstraintName("FK_DetailColor_Product");
+
+                    b.Navigation("IdColorNavigation");
+
+                    b.Navigation("IdProductNavigation");
                 });
 
-            modelBuilder.Entity("WebBanHang.Model.OrderDetail", b =>
+            modelBuilder.Entity("WebBanHang.Models.DetailRom", b =>
                 {
-                    b.HasOne("WebBanHang.Model.Order", "Order")
+                    b.HasOne("WebBanHang.Models.Product", "IdProductNavigation")
+                        .WithMany("DetailRoms")
+                        .HasForeignKey("IdProduct")
+                        .HasConstraintName("FK_DetailRom_Product");
+
+                    b.HasOne("WebBanHang.Models.Rom", "IdRomNavigation")
+                        .WithMany("DetailRoms")
+                        .HasForeignKey("IdRom")
+                        .HasConstraintName("FK_DetailRom_Rom");
+
+                    b.Navigation("IdProductNavigation");
+
+                    b.Navigation("IdRomNavigation");
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.OrderDetail", b =>
+                {
+                    b.HasOne("WebBanHang.Models.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("WebBanHang.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -471,19 +534,33 @@ namespace WebBanHang.Migrations
                     b.Navigation("Menu");
                 });
 
-            modelBuilder.Entity("WebBanHang.Model.Customer", b =>
+            modelBuilder.Entity("WebBanHang.Models.Color", b =>
                 {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("WebBanHang.Model.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
+                    b.Navigation("DetailColors");
                 });
 
             modelBuilder.Entity("WebBanHang.Models.Menu", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.Product", b =>
+                {
+                    b.Navigation("DetailColors");
+
+                    b.Navigation("DetailRoms");
+
+                    b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.Rom", b =>
+                {
+                    b.Navigation("DetailRoms");
                 });
 #pragma warning restore 612, 618
         }

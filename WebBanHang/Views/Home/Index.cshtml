@@ -90,10 +90,7 @@ img {vertical-align: middle;}
 }
 
 .item-box{
-    padding: 0 10px;
     margin: 20px 0;
-    
-    
 }
 .item-box .product-item{
     background-color: white;
@@ -106,7 +103,7 @@ img {vertical-align: middle;}
     box-shadow: 1px 1px 28px 0px rgb(0 0 0 / 12%);
 }
 .details{
-    padding: 5px 15px 15px 15px;
+    padding: 5px 14px 15px 14px;
 }
 .details a{
     font-weight: 600;
@@ -121,9 +118,13 @@ img {vertical-align: middle;}
 }
 .details span{
     font-weight: 700;
-    font-size: 13px;
     line-height: 24px;
-    color: #0066CC;
+}
+
+.details .percent, .old-price{
+    color: #86868B;
+    margin: 0 5px 0 5px;
+    font-size: 12px;
 }
 .show-all a{
     text-decoration: none;
@@ -147,6 +148,12 @@ img {vertical-align: middle;}
 }
 
 /* On smaller screens, decrease text size */
+@@media (max-width: 767px) {
+    .details .percent, .old-price {
+        margin: 0;
+        font-size: 10px;
+    }
+}
 @@media only screen and (max-width: 300px) {
   .prev, .next,.text {font-size: 11px}
 }
@@ -174,296 +181,161 @@ img {vertical-align: middle;}
         <span class="dot" onclick="currentSlide(3)"></span> 
     </div> 
 </div>
-<div style="background-color: #f5f5f7">
+<div style="background-color: #f5f5f7" class="pb-3">
     <div class="container">
         <h1 class="d-flex justify-content-center title">iPhone</h1>
-        <div class="row w-100">
-            @foreach(var item in Model)
+        <div class="row">
+            @foreach (var item in Model.Where(p => p.Menu.Name == "iPhone").OrderByDescending(p => p.Created).Take(4))
             {
-                if (item.Menu.Name == "iPhone")
-                {
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
+                <div class="col-md-3 col-6 item-box">
+                    <div class="product-item">
+                        <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products" asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD">
                             <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
+                        </a>
+                        <div class="details">
+                            <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products" asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD">@item.Name</a>
+                            <div class="price">
+                                <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
+                                @if (item.OldPrice != null)
+                                {
+                                    double x = double.Parse(item.OldPrice?.ToString());
+                                    double discountPercentage = (x - item.Price) / item.OldPrice.Value * 100;
+                                    int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+
+                                    <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
+                                    <span class="percent">@discountPercentageInteger%</span>
+                                }
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+                </div>
             }
             <div class="show-all d-flex justify-content-center">
-                <a asp-action="index" asp-controller="Products">Xem tất cả iPhone ❯</a>
+                <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="7F9351B3-F8E3-4526-82B3-DEC7BAC5316E">Xem tất cả iPhone ❯</a>
             </div>
         </div>
-        <h1 class="d-flex justify-content-center title">iPad</h1>
-        <div class="row w-100">
-            @foreach(var item in Model)
-            {
-                if (item.Menu.Name == "iPad")
-                {
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
+         <h1 class="d-flex justify-content-center title">iPad</h1>
+         <div class="row">
+             @foreach (var item in Model.Where(p => p.Menu.Name == "iPad").OrderByDescending(p => p.Created).Take(4))
+             {
+                 <div class="col-md-3 col-6 item-box">
+                     <div class="product-item">
+                        <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products">
                             <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
+                        </a>                         <div class="details">
+                             <a asp-action="" asp-controller="Products">@item.Name</a>
+                             <div class="price">
+                                <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
+                                @if (item.OldPrice != null)
+                                {
+                                    double x = double.Parse(item.OldPrice?.ToString());
+                                    double discountPercentage = (x - item.Price) / item.OldPrice.Value * 100;
+                                    int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+
+                                    <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
+                                    <span class="percent">@discountPercentageInteger%</span>
+                                }
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             }
+             <div class="show-all d-flex justify-content-center">
+                <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="D59BB95E-8772-42E6-96F3-6087D67B3CF4">Xem tất cả iPad ❯</a>
+             </div>
+         </div>
+         <h1 class="d-flex justify-content-center title">Mac</h1>
+         <div class="row">
+             @foreach (var item in Model.Where(p => p.Menu.Name == "Mac").OrderByDescending(p => p.Created).Take(4))
+             {
+                 <div class="col-md-3 col-6 item-box">
+                     <div class="product-item">
+                        <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products">
                             <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
+                        </a>                         <div class="details">
+                             <a asp-action="" asp-controller="Products">@item.Name</a>
+                             <div class="price">
+                                <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
+                                @if (item.OldPrice != null)
+                                {
+                                    double x = double.Parse(item.OldPrice?.ToString());
+                                    double discountPercentage = (x - item.Price) / item.OldPrice.Value * 100;
+                                    int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+
+                                    <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
+                                    <span class="percent">@discountPercentageInteger%</span>
+                                }
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             }
+             <div class="show-all d-flex justify-content-center">
+                <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="36C999A5-06E8-4A55-A32B-CA985D8894BB">Xem tất cả Mac ❯</a>
+             </div>
+         </div>
+         <h1 class="d-flex justify-content-center title">Watch</h1>
+         <div class="row">
+             @foreach (var item in Model.Where(p => p.Menu.Name == "Watch").OrderByDescending(p => p.Created).Take(4))
+             {
+                 <div class="col-md-3 col-6 item-box">
+                     <div class="product-item">
+                        <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products">
                             <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            <div class="show-all d-flex justify-content-center">
-                <a asp-action="index" asp-controller="Products">Xem tất cả iPad ❯</a>
-            </div>
-        </div>
-        <h1 class="d-flex justify-content-center title">Mac</h1>
-        <div class="row w-100">
-            @foreach(var item in Model)
-            {
-                if (item.Menu.Name == "Mac")
-                {
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            <div class="show-all d-flex justify-content-center">
-                <a asp-action="index" asp-controller="Products">Xem tất cả Mac ❯</a>
-            </div>
-        </div>
-        <h1 class="d-flex justify-content-center title">Watch</h1>
-        <div class="row w-100">
-            @foreach(var item in Model)
-            {
-                if (item.Menu.Name == "Watch")
-                {
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 item-box">
-                        <div class="product-item">
-                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                            <div class="details">
-                                <a asp-action="" asp-controller="Products">@item.Name</a>
-                                <div class="price">
-                                    <span>@item.Price.ToString("#,0")₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px; text-decoration: line-through;">30.990.000₫</span>
-                                    <span style="color: #86868B; margin: 0 5px 0 5px; font-size: 12px; line-height: 24px;">-11%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            }
-            <div class="show-all d-flex justify-content-center">
-                <a asp-action="index" asp-controller="Products">Xem tất cả Watch ❯</a>
-            </div>
-        </div>
+                        </a>                         <div class="details">
+                             <a asp-action="" asp-controller="Products">@item.Name</a>
+                             <div class="price">
+                                <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
+                                @if (item.OldPrice != null)
+                                {
+                                    double x = double.Parse(item.OldPrice?.ToString());
+                                    double discountPercentage = (x - item.Price) / item.OldPrice.Value * 100;
+                                    int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+
+                                    <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
+                                    <span class="percent">@discountPercentageInteger%</span>
+                                }
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             }
+             <div class="show-all d-flex justify-content-center">
+                <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="92312A61-CEA1-4153-8ADF-59E9A94AD8D5">Xem tất cả Watch ❯</a>
+             </div>
+         </div>
     </div>
 </div>
 
 <script>
-let slideIndex = 1;
-showSlides(slideIndex);
+    let slideIndex = 1;
+    showSlides(slideIndex);
 
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
 
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
 
-function showSlides(n) {
-  let i;
-  let slides = document.getElementsByClassName("mySlides");
-  let dots = document.getElementsByClassName("dot");
-  if (n > slides.length) {slideIndex = 1}    
-  if (n < 1) {slideIndex = slides.length}
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
-  }
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
-  }
-  slides[slideIndex-1].style.display = "block";  
-  dots[slideIndex-1].className += " active";
-}
+    function showSlides(n) {
+      let i;
+      let slides = document.getElementsByClassName("mySlides");
+      let dots = document.getElementsByClassName("dot");
+      if (n > slides.length) {slideIndex = 1}    
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";  
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex-1].style.display = "block";  
+      dots[slideIndex-1].className += " active";
+    }
 
-setInterval(function() {
-    plusSlides(1);
-}, 2500);
+    setInterval(function() {
+        plusSlides(1);
+    }, 2500);
 </script>

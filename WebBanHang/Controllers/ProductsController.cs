@@ -24,7 +24,7 @@ namespace WebBanHang.Controllers
         }
 
         // GET: Products/Details/5
-        public async Task<IActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid? id, [FromQuery] Guid? IdRom)
         {
             if (id == null || _context.Products == null)
             {
@@ -33,12 +33,14 @@ namespace WebBanHang.Controllers
 
             var product = await _context.Products
                 .Include(p => p.Menu)
+                .Include(p => p.DetailRoms)
+                .ThenInclude(dr => dr.IdRomNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
                 return NotFound();
             }
-
+            ViewBag.IdRom = IdRom;
             return View(product);
         }
 
@@ -48,10 +50,6 @@ namespace WebBanHang.Controllers
             ViewData["MenuName"] = new SelectList(_context.Menus, "Id", "Name");
             return View();
         }
-
-        // POST: Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         public async Task<IActionResult> Create(Product product)
         {
@@ -67,7 +65,7 @@ namespace WebBanHang.Controllers
                         await product.ImageFile.CopyToAsync(stream);
                     }
                 }
-
+                product.Created = DateTime.Now;
                 product.Id = Guid.NewGuid();
                 _context.Add(product);
                 await _context.SaveChangesAsync();
@@ -221,6 +219,7 @@ namespace WebBanHang.Controllers
             ViewBag.MenuId = id;
             var products = _context.Products.Include(p => p.Menu)
                 .Where(p => p.Menu.Id.ToString() == id);
+            ViewBag.MenuName = _context.Menus.FirstOrDefault(m => m.Id.ToString() == id)?.Name;
             return View(await products.ToListAsync());
         }
 

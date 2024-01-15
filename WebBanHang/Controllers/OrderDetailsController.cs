@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Areas.Identity.Data;
-using WebBanHang.Model;
 using WebBanHang.Models;
 
 namespace WebBanHang.Controllers

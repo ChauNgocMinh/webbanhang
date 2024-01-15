@@ -1,29 +1,63 @@
 ﻿@model WebBanHang.Models.Product
-
+@{
+    Guid? IdRom = ViewBag.IdRom;
+}
 <style>
+    .back-link {
+        padding: 10px;
+        color: #515154;
+        font-size: 13px;
+    }
+
+    .back-link a {
+        margin: 0 5px;
+        color: #515154;
+    }
+
     .product_info_container {
         display: flex;
         margin: 20px;
     }
 
-        .product_info_container img {
-            width: 400px;
-            margin-right: 50px;
-        }
+    .product_info_container .gallery{
+        width: 45%;
+    }
+    
+    .product_info_container .picture{
+        background: #F5F5F7;
+        border-radius: 8px;
+        box-shadow: 0px 0px 15px rgb(0 0 0 / 3%);
+        padding: 15px;
+    }
+    .product_info_container .picture .pic-show {
+        width: 100%;
+        height: 100%;
+        background: white;
+    }
+
+    .picture-slide img {
+        width: 85px;
+        height: 85px;
+    }
 
     .info_container {
-        max-width: 600px;
+        margin: 0 30px;
+        flex-grow: 1;
     }
 
     .name_product_title {
-        font-size: 30px;
-        margin-bottom: 10px;
+        font-size: 24px;
+        color: #1D1D1F;
+        font-weight: 700;
+        line-height: 36px;
+        padding: 0;
+        margin: 0;
     }
 
     .price_product_title {
-        color: #f1425d;
-        font-size: 25px;
-        margin-bottom: 20px;
+            color: #0066CC;
+    font-size: 24px;
+    font-weight: bold;
     }
 
     .block_quantity {
@@ -69,19 +103,55 @@
         text-decoration: none;
     }
 
-        .add_to_cart_button:hover,
-        .checkout_button:hover {
-            background-color: #d23c57;
-            color: black;
-        }
+    .add_to_cart_button:hover,
+    .checkout_button:hover {
+        background-color: #d23c57;
+        color: black;
+    }
 </style>
+<div class="back-link">
+    <div class="container">
+        <a asp-action="" asp-controller="Home">Trang chủ</a> > <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="@Model.Menu.Id">@Model.Menu.Name</a> > <a>@Model.Name</a>
+    </div>
+</div>
 <div class="container">
     <form>
         <div class="product_info_container">
-            <img src="~/image/Product/@Model.Image" />
+            <div class="gallery">
+                <div class="picture">
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                </div>
+                <div class="picture-slide d-flex ">
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                </div>
+            </div>
             <div class="info_container">
-                <div class="name_product_title">@Model.Name</div>
-                <h5 class="price_product_title">@Model.Price.ToString("#,0")₫</h5>
+                <h1 class="name_product_title">@Model.Name</h1>
+                @if (IdRom == null)
+                {
+                    <h5 class="price_product_title">@Model.Price.ToString("#,0")₫</h5>
+                }
+                else
+                {
+                    var x = Model.Price + Model.DetailRoms.FirstOrDefault(x => x.IdRom == IdRom).Price;
+                    <h5 class="price_product_title">@x?.ToString("#,0")₫</h5>
+                }
+                @foreach(var item in Model.DetailRoms)
+                {
+                    @if (IdRom != item.IdRomNavigation.Id)
+                    {
+                        <a asp-action="Details" asp-controller="Products" asp-route-id="@Model.Id" asp-route-IdRom="@item.IdRomNavigation.Id">@item.IdRomNavigation.Capacity</a>
+                    }
+                    else
+                    {
+                        <a class="text-danger" asp-action="Details" asp-controller="Products" asp-route-id="@Model.Id" asp-route-IdRom="@item.IdRomNavigation.Id">@item.IdRomNavigation.Capacity</a>
+                    }
+                   
+                }
                 <div class="block_quantity">
                     <span class="text_specification">Quantity</span>
                     <div class="block_quantity__chooseBlock">
@@ -100,10 +170,7 @@
         </div>
     </form>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-
-
     function addToCart() {
         var qty = $('.block_quantity__number').val();
         var productId = '@Model.Id';

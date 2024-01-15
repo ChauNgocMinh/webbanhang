@@ -3,84 +3,109 @@
 @{
     ViewData["Title"] = "Product Index";
 }
-
 <style>
-    .search-container {
-        margin-bottom: 20px;
+    .back-link{
+        padding: 10px;
+        color: #515154;
+        font-size: 13px;
+    }
+    .back-link a{
+        margin: 0 5px;
+        color: #515154;
     }
 
-    .table img {
-        max-width: 100%;
-        height: auto;
+
+    .title {
+        font-weight: 700;
+        font-size: 25px;
+        line-height: 45px;
+        color: #1D1D1F;
+        padding-top: 15px;
     }
 
-    .action-links a {
-        margin-right: 10px;
+    .item-box {
+        padding: 0 10px;
+        margin: 20px 0;
     }
 
-    .create-button {
-        margin-bottom: 20px;
-        text-align: right;
+    .item-box .product-item {
+        background-color: white;
+        padding-top: 10px;
+        border-radius: 8px;
+        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.04);
     }
 
-    /* Responsive table styling */
+    .item-box .product-item:hover {
+        border-color: #02010100;
+        box-shadow: 1px 1px 28px 0px rgb(0 0 0 / 12%);
+    }
+
+    .details {
+        padding: 5px 14px 15px 14px;
+    }
+
+    .details a {
+        font-weight: 600;
+        min-height: 45px;
+        font-size: 15px;
+        color: #1D1D1F;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-decoration: none;
+    }
+
+    .details span {
+        font-weight: 700;
+        line-height: 24px;
+    }
+
+    .details .percent, .old-price {
+        color: #86868B;
+        margin: 0 5px 0 5px;
+        font-size: 12px;
+    }
+
     @@media (max-width: 767px) {
-        .table th, .table td {
-            text-align: center;
-        }
-
-        .action-links {
-            text-align: center;
-            margin-top: 10px; /* Adjust margin for better spacing */
+        .details .percent, .old-price {
+            margin: 0;
+            font-size: 10px;
         }
     }
 </style>
-
-<div class="container mt-4">
-    <div class="search-container">
-        <form asp-action="Search" method="post">
-            <div class="input-group">
-                <input type="text" class="form-control" name="keyword" placeholder="Enter product name" />
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Search</button>
-                </div>
-            </div>
-        </form>
+<div class="back-link">
+    <div class="container">
+        <a asp-action="" asp-controller="Home">Trang chủ</a> > <a>@ViewBag.MenuName</a>
     </div>
-
-    @await Component.InvokeAsync("Menu")
-
-    <div class="create-button">
-        <a asp-action="Create" class="btn btn-success">Tạo sản phẩm mới</a>
-    </div>
-
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.Name)</th>
-                <th>@Html.DisplayNameFor(model => model.Image)</th>
-                <th>@Html.DisplayNameFor(model => model.Price)</th>
-                <th>@Html.DisplayNameFor(model => model.Number)</th>
-                <th>@Html.DisplayNameFor(model => model.Menu)</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+</div>
+<div style="background-color: #f5f5f7" class="pb-3">
+    <div class="container">
+        <h1 class="d-flex justify-content-center title">@ViewBag.MenuName</h1>
+        <div class="row">
+            @foreach (var item in Model.OrderByDescending(p => p.Created))
             {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                    <td><img src="~/image/Product/@item.Image" width="100px" alt="@item.Name" /></td>
-                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Number)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Menu.Name)</td>
-                    <td class="action-links">
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
+                <div class="col-md-3 col-6 item-box">
+                    <div class="product-item">
+                        <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products"><img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" /></a>
+                        <div class="details">
+                            <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products">@item.Name</a>
+                            <div class="price">
+                                <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
+                                @if (item.OldPrice != null)
+                                {
+                                    double x = double.Parse(item.OldPrice?.ToString());
+                                    double discountPercentage = (x - item.Price) / item.OldPrice.Value * 100;
+                                    int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+
+                                    <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
+                                    <span class="percent">@discountPercentageInteger%</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+      
+    </div>
 </div>
