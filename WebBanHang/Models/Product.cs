@@ -6,8 +6,8 @@ namespace WebBanHang.Models;
 public class Product
 {
     public Guid Id { get; set; }
-    public string? Name { get; set; }
-    public Guid? MenuId { get; set; }
+    public string Name { get; set; } = null!;
+    public Guid MenuId { get; set; }
     public string? Image { get; set; }
     public double Price { get; set; }
     public int? Number { get; set; }
@@ -18,7 +18,7 @@ public class Product
     [Display(Name = "Choose Image")]
     public IFormFile ImageFile { get; set; }
     public virtual Menu? Menu { get; set; }
-    public List<DetailColor> DetailColors { get; set; } = new();
-    public List<DetailRom> DetailRoms { get; set; } = new();
+    public HashSet<DetailColor> Colors { get; set; } = new();
+    public HashSet<DetailRom> DetailRoms { get; set; } = new();
     public List<OrderDetail> OrderDetails { get; set; } = new();
 }

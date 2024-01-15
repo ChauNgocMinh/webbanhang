@@ -17,6 +17,7 @@ public class ProductsController : Controller
     }
 
     // GET: Products
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
         var products = _context.Products.Include(p => p.Menu);
@@ -36,6 +37,7 @@ public class ProductsController : Controller
             .Include(p => p.DetailRoms)
             .ThenInclude(dr => dr.IdRomNavigation)
             .FirstOrDefaultAsync(m => m.Id == id);
+            
         if (product == null)
         {
             return NotFound();

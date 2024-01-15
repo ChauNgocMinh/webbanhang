@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace WebBanHang.Models;
 
-namespace WebBanHang.Models
+public class DetailColor
 {
-    public partial class DetailColor
-    {
-        public Guid? IdProduct { get; set; }
-        public Guid? IdColor { get; set; }
-        public Guid Id { get; set; }
-        public double? Price { get; set; }
-        public virtual Color? IdColorNavigation { get; set; }
-        public virtual Product? IdProductNavigation { get; set; }
-    }
+    public Guid Id { get; set; }
+    public double Price { get; set; } = 0;
+
+    public Guid IdProductColor { get; set; }
+    public Color ProductColor { get; set; } = null!;
+
+    public Guid IdProduct { get; set; }
+    public Product Product { get; set; } = null!;
 }
