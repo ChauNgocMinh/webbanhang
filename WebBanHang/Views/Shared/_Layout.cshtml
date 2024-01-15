@@ -1,8 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using WebBanHang.Areas.Identity.Data
 
-@inject SignInManager<WebBanHangUser> SignInManager
-@inject UserManager<WebBanHangUser> UserManager
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +29,9 @@
     .navbar-nav .nav-link {
         padding: 17px;
         transition: background-color 0.3s ease, box-shadow 0.3s ease; 
+        color: #d2d2d7 !important;
+    }
+    .navbar-nav .nav-link:hover{
         color: #fff !important;
     }
 
@@ -158,6 +160,12 @@
                             <a class="nav-link" asp-area="" asp-controller="Menus" asp-action="Index">Watch</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link">Âm thanh</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">Phụ kiện</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link">Tin tức</a>
                         </li>
                         <li class="nav-item">
@@ -166,36 +174,6 @@
                         <li class="nav-item">
                             <a class="nav-link">Khuyến mãi</a>
                         </li>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            @if (this.User.IsInRole("Quản lý"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">Phân quyền</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Menus" asp-action="Index">Menu</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Products" asp-action="Index">Sản phẩm</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="ManageOrder">Đơn hàng</a>
-                                </li>
-                                @* <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Role" asp-action="Index">Role</a>
-                                </li> *@
-                            }
-                           
-                            @if (this.User.IsInRole("Khách Hàng"))
-                            {
-                          
-                            }
-                        }
-                        else
-                        {
-                           
-                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (SignInManager.IsSignedIn(User))
@@ -280,7 +258,6 @@
                             </a>
                         </li>
                     </ul>
-                    
                 </div>
             </div>
         </nav>

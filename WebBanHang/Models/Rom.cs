@@ -8,7 +8,7 @@ public partial class Rom
     }
 
     public Guid Id { get; set; }
-    public int? Capacity { get; set; }
+    public string? Capacity { get; set; }
 
     public virtual ICollection<DetailRom> DetailRoms { get; set; }
 }

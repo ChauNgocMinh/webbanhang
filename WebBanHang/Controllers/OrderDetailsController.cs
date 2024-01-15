@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using WebBanHang.Areas.Identity.Data;
+//using WebBanHang.Areas.Identity.Data;
 using WebBanHang.Models;
 
 namespace WebBanHang.Controllers;
@@ -12,8 +12,8 @@ namespace WebBanHang.Controllers;
 public class OrderDetailsController : Controller
 {
     private readonly WebBanHangContext _context;
-    private readonly UserManager<WebBanHangUser> _userManager;
-    public OrderDetailsController(WebBanHangContext context, UserManager<WebBanHangUser> userManager)
+    private readonly UserManager<AppUser> _userManager;
+    public OrderDetailsController(WebBanHangContext context, UserManager<AppUser> userManager)
     {
         _context = context;
         _userManager = userManager;

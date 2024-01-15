@@ -25,7 +25,7 @@ public class ProductsController : Controller
     }
 
     // GET: Products/Details/5
-    public async Task<IActionResult> Details(Guid? id, [FromQuery] Guid? IdRom)
+    public async Task<IActionResult> Details(Guid? id, [FromQuery] Guid? IdRom, [FromQuery] Guid? IdColor)
     {
         if (id == null || _context.Products == null)
         {
@@ -36,13 +36,32 @@ public class ProductsController : Controller
             .Include(p => p.Menu)
             .Include(p => p.DetailRoms)
             .ThenInclude(dr => dr.IdRomNavigation)
+            .Include(x => x.DetailColors)
+            .ThenInclude(xx => xx.IdColorNavigation)
             .FirstOrDefaultAsync(m => m.Id == id);
-            
+        if (IdRom == null)
+        {
+            var Rom = await _context.DetailRoms
+                .Where(x => x.IdProduct == product.Id)
+                .OrderBy(x => x.Price)
+                .FirstOrDefaultAsync();
+            IdRom = Rom.IdRom;
+        }
+        if (IdColor == null)
+        {
+            var Color = await _context.DetailColors
+                .Where(x => x.IdProduct == product.Id)
+                .OrderBy(x => x.Price)
+                .FirstOrDefaultAsync();
+            IdColor = Color.IdColor;
+        }
+        var color = await _context.DetailRoms.ToListAsync();
         if (product == null)
         {
             return NotFound();
         }
         ViewBag.IdRom = IdRom;
+        ViewBag.IdColor = IdColor;
         return View(product);
     }
 

@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using WebBanHang.Areas.Identity.Data;
+//using WebBanHang.Areas.Identity.Data;
 using WebBanHang.Areas.Identity.Pages.Account;
+using WebBanHang.Models;
 using WebBanHang.ViewModels;
 
 namespace WebBanHang.Controllers
@@ -12,10 +13,10 @@ namespace WebBanHang.Controllers
     //[Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private readonly UserManager<WebBanHangUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdminController(UserManager<WebBanHangUser> userManager, RoleManager<IdentityRole> roleManager)
+        public AdminController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -104,7 +105,7 @@ namespace WebBanHang.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new WebBanHangUser
+                var user = new AppUser
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
@@ -186,7 +187,7 @@ namespace WebBanHang.Controllers
         public async Task<IActionResult> Search(string keyword)
         {
             if (!string.IsNullOrEmpty(keyword)) {
-                IQueryable<WebBanHangUser> data = _userManager.Users.AsQueryable();
+                IQueryable<AppUser> data = _userManager.Users.AsQueryable();
                 if (!string.IsNullOrEmpty(keyword))
                 {
                     data = data.Where(u => u.FirstName.Contains(keyword) || u.LastName.Contains(keyword));

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebBanHang.Areas.Identity.Data;
+//using WebBanHang.Areas.Identity.Data;
 using WebBanHang.Models;
 
 namespace WebBanHang.Controllers
@@ -10,9 +10,9 @@ namespace WebBanHang.Controllers
     {
         private readonly WebBanHangContext _context;
         private readonly IWebHostEnvironment _webHost;
-        private readonly UserManager<WebBanHangUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CustomerController(WebBanHangContext context, IWebHostEnvironment webHost, UserManager<WebBanHangUser> userManager)
+        public CustomerController(WebBanHangContext context, IWebHostEnvironment webHost, UserManager<AppUser> userManager)
         {
             _context = context;
             _webHost = webHost;

@@ -20,24 +20,25 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using WebBanHang.Areas.Identity.Data;
+//using WebBanHang.Areas.Identity.Data;
+using WebBanHang.Models;
 
 namespace WebBanHang.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<WebBanHangUser> _signInManager;
-        private readonly UserManager<WebBanHangUser> _userManager;
-        private readonly IUserStore<WebBanHangUser> _userStore;
-        private readonly IUserEmailStore<WebBanHangUser> _emailStore;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IUserStore<AppUser> _userStore;
+        private readonly IUserEmailStore<AppUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
-            UserManager<WebBanHangUser> userManager,
-            IUserStore<WebBanHangUser> userStore,
-            SignInManager<WebBanHangUser> signInManager,
+            UserManager<AppUser> userManager,
+            IUserStore<AppUser> userStore,
+            SignInManager<AppUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             RoleManager<IdentityRole> roleManager)
@@ -191,27 +192,27 @@ namespace WebBanHang.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private WebBanHangUser CreateUser()
+        private AppUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<WebBanHangUser>();
+                return Activator.CreateInstance<AppUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(WebBanHangUser)}'. " +
-                    $"Ensure that '{nameof(WebBanHangUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(AppUser)}'. " +
+                    $"Ensure that '{nameof(AppUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<WebBanHangUser> GetEmailStore()
+        private IUserEmailStore<AppUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<WebBanHangUser>)_userStore;
+            return (IUserEmailStore<AppUser>)_userStore;
         }
     }
 }

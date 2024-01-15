@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "d:\\Projects\\webbanhang\\WebBanHang\\WebBanHang.csproj": {}
+    "C:\\Users\\PC\\Downloads\\WebBanHang (1)\\WebBanHang\\WebBanHang.csproj": {}
   },
   "projects": {
-    "d:\\Projects\\webbanhang\\WebBanHang\\WebBanHang.csproj": {
+    "C:\\Users\\PC\\Downloads\\WebBanHang (1)\\WebBanHang\\WebBanHang.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\Projects\\webbanhang\\WebBanHang\\WebBanHang.csproj",
+        "projectUniqueName": "C:\\Users\\PC\\Downloads\\WebBanHang (1)\\WebBanHang\\WebBanHang.csproj",
         "projectName": "WebBanHang",
-        "projectPath": "d:\\Projects\\webbanhang\\WebBanHang\\WebBanHang.csproj",
-        "packagesPath": "C:\\Users\\Nguyen\\.nuget\\packages\\",
-        "outputPath": "d:\\Projects\\webbanhang\\WebBanHang\\obj\\",
+        "projectPath": "C:\\Users\\PC\\Downloads\\WebBanHang (1)\\WebBanHang\\WebBanHang.csproj",
+        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\PC\\Downloads\\WebBanHang (1)\\WebBanHang\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\DevExpress 23.1\\Components\\Offline Packages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Nguyen\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 23.1.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\DevExpress 23.1\\Components\\System\\Components\\Packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -76,24 +83,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.21, 6.0.21]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[6.0.21, 6.0.21]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.21, 6.0.21]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.21, 6.0.21]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -102,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

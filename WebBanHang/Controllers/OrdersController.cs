@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
-using WebBanHang.Areas.Identity.Data;
+//using WebBanHang.Areas.Identity.Data;
 using WebBanHang.Models;
 using WebBanHang.ViewModels;
 using static NuGet.Packaging.PackagingConstants;
@@ -19,9 +19,9 @@ namespace WebBanHang.Controllers
     public class OrdersController : Controller
     {
         private readonly WebBanHangContext _context;
-        private readonly UserManager<WebBanHangUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public OrdersController(WebBanHangContext context, UserManager<WebBanHangUser> userManager)
+        public OrdersController(WebBanHangContext context, UserManager<AppUser> userManager)
         {
             _context = context;
             _userManager = userManager;

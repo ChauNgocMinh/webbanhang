@@ -8,8 +8,8 @@ public static class AppExtentions
 {
     public static IServiceCollection AddAppDbContext(this IServiceCollection services, WebApplicationBuilder builder)
     {
-        if (builder.Environment.IsDevelopment())
-            return services.AddDbContext<WebBanHangContext, SqliteDbContext>();
+        //if (builder.Environment.IsDevelopment())
+            //return services.AddDbContext<WebBanHangContext, SqliteDbContext>();
         return services.AddDbContext<WebBanHangContext, MsSqlDbContext>();
     }
 

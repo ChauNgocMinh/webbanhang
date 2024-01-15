@@ -34,13 +34,13 @@ public class MsSqlDbContext : WebBanHangContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
 
-            entity.HasOne(d => d.ProductColor)
-                .WithMany(p => p.Colors)
-                .HasForeignKey(d => d.IdProduct)
+            entity.HasOne(d => d.IdColorNavigation)
+                .WithMany(p => p.DetailColors)
+                .HasForeignKey(d => d.IdColor)
                 .HasConstraintName("FK_DetailColor_Color");
 
-            entity.HasOne(d => d.Product)
-                .WithMany(p => p.Colors)
+            entity.HasOne(d => d.IdProductNavigation)
+                .WithMany(p => p.DetailColors)
                 .HasForeignKey(d => d.IdProduct)
                 .HasConstraintName("FK_DetailColor_Product");
         });

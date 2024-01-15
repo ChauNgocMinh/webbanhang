@@ -35,15 +35,15 @@ public class SqliteDbContext : WebBanHangContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
 
-            entity.HasOne(d => d.ProductColor)
-                .WithMany(p => p.Colors)
+            entity.HasOne(d => d.IdProductNavigation)
+                .WithMany(p => p.DetailColors)
                 .HasForeignKey(d => d.IdProduct)
-                .HasConstraintName("FK_DetailColor_Color");
+                .HasConstraintName("FK_DetailRom_Product");
 
-            entity.HasOne(d => d.Product)
-                .WithMany(p => p.Colors)
-                .HasForeignKey(d => d.IdProduct)
-                .HasConstraintName("FK_DetailColor_Product");
+            entity.HasOne(d => d.IdColorNavigation)
+                .WithMany(p => p.DetailColors)
+                .HasForeignKey(d => d.IdColor)
+                .HasConstraintName("FK_DetailRom_Color");
         });
 
         modelBuilder.Entity<DetailRom>(entity =>

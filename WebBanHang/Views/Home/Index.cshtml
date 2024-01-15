@@ -189,11 +189,17 @@ img {vertical-align: middle;}
             {
                 <div class="col-md-3 col-6 item-box">
                     <div class="product-item">
-                        <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products" asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD">
+                        <a asp-action="Details"
+                           asp-route-id="@item.Id"
+                           asp-controller="Products">
                             <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
                         </a>
                         <div class="details">
-                            <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products" asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD">@item.Name</a>
+                            <a asp-action="Details" 
+                            asp-route-id="@item.Id" 
+                            asp-controller="Products" >
+                                @item.Name
+                            </a>
                             <div class="price">
                                 <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
                                 @if (item.OldPrice != null)
@@ -201,7 +207,6 @@ img {vertical-align: middle;}
                                     double x = double.Parse(item.OldPrice?.ToString());
                                     double discountPercentage = (x - item.Price) / item.OldPrice.Value * 100;
                                     int discountPercentageInteger = Convert.ToInt32(discountPercentage);
-
                                     <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
                                     <span class="percent">@discountPercentageInteger%</span>
                                 }
@@ -218,27 +223,33 @@ img {vertical-align: middle;}
          <div class="row">
              @foreach (var item in Model.Where(p => p.Menu.Name == "iPad").OrderByDescending(p => p.Created).Take(4))
              {
-                 <div class="col-md-3 col-6 item-box">
-                     <div class="product-item">
-                        <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products">
+                <div class="col-md-3 col-6 item-box">
+                    <div class="product-item">
+                        <a asp-action="Details"
+                           asp-route-id="@item.Id"
+                           asp-controller="Products">
                             <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                        </a>                         <div class="details">
-                             <a asp-action="" asp-controller="Products">@item.Name</a>
-                             <div class="price">
+                        </a>
+                        <div class="details">
+                            <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               asp-controller="Products">
+                                @item.Name
+                            </a>
+                            <div class="price">
                                 <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
                                 @if (item.OldPrice != null)
                                 {
                                     double x = double.Parse(item.OldPrice?.ToString());
                                     double discountPercentage = (x - item.Price) / item.OldPrice.Value * 100;
                                     int discountPercentageInteger = Convert.ToInt32(discountPercentage);
-
                                     <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
                                     <span class="percent">@discountPercentageInteger%</span>
                                 }
-                             </div>
-                         </div>
-                     </div>
-                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
              }
              <div class="show-all d-flex justify-content-center">
                 <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="D59BB95E-8772-42E6-96F3-6087D67B3CF4">Xem tất cả iPad ❯</a>
@@ -248,27 +259,33 @@ img {vertical-align: middle;}
          <div class="row">
              @foreach (var item in Model.Where(p => p.Menu.Name == "Mac").OrderByDescending(p => p.Created).Take(4))
              {
-                 <div class="col-md-3 col-6 item-box">
-                     <div class="product-item">
-                        <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products">
+                <div class="col-md-3 col-6 item-box">
+                    <div class="product-item">
+                        <a asp-action="Details"
+                           asp-route-id="@item.Id"
+                           asp-controller="Products">
                             <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                        </a>                         <div class="details">
-                             <a asp-action="" asp-controller="Products">@item.Name</a>
-                             <div class="price">
+                        </a>
+                        <div class="details">
+                            <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               asp-controller="Products">
+                                @item.Name
+                            </a>
+                            <div class="price">
                                 <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
                                 @if (item.OldPrice != null)
                                 {
                                     double x = double.Parse(item.OldPrice?.ToString());
                                     double discountPercentage = (x - item.Price) / item.OldPrice.Value * 100;
                                     int discountPercentageInteger = Convert.ToInt32(discountPercentage);
-
                                     <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
                                     <span class="percent">@discountPercentageInteger%</span>
                                 }
-                             </div>
-                         </div>
-                     </div>
-                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
              }
              <div class="show-all d-flex justify-content-center">
                 <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="36C999A5-06E8-4A55-A32B-CA985D8894BB">Xem tất cả Mac ❯</a>
@@ -278,27 +295,33 @@ img {vertical-align: middle;}
          <div class="row">
              @foreach (var item in Model.Where(p => p.Menu.Name == "Watch").OrderByDescending(p => p.Created).Take(4))
              {
-                 <div class="col-md-3 col-6 item-box">
-                     <div class="product-item">
-                        <a asp-action="Details" asp-route-id="@item.Id" asp-controller="Products">
+                <div class="col-md-3 col-6 item-box">
+                    <div class="product-item">
+                        <a asp-action="Details"
+                           asp-route-id="@item.Id"
+                           asp-controller="Products">
                             <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
-                        </a>                         <div class="details">
-                             <a asp-action="" asp-controller="Products">@item.Name</a>
-                             <div class="price">
+                        </a>
+                        <div class="details">
+                            <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               asp-controller="Products">
+                                @item.Name
+                            </a>
+                            <div class="price">
                                 <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
                                 @if (item.OldPrice != null)
                                 {
                                     double x = double.Parse(item.OldPrice?.ToString());
                                     double discountPercentage = (x - item.Price) / item.OldPrice.Value * 100;
                                     int discountPercentageInteger = Convert.ToInt32(discountPercentage);
-
                                     <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
                                     <span class="percent">@discountPercentageInteger%</span>
                                 }
-                             </div>
-                         </div>
-                     </div>
-                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
              }
              <div class="show-all d-flex justify-content-center">
                 <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="92312A61-CEA1-4153-8ADF-59E9A94AD8D5">Xem tất cả Watch ❯</a>
