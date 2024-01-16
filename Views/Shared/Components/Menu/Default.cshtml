@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Menu>
+<div class="dropdown mt-3">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="MenuDropdowm" data-bs-toggle="dropdown">
+        Danh mục
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="MenuDropdowm">
+        @foreach (var menu in Model)
+        {
+            <li><a class="dropdown-item" asp-action="GetByMenu" asp-route-id="@menu.Id">@menu.Name</a></li>
+        }
+    </ul>
+</div>

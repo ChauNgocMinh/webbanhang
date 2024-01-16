@@ -1,0 +1,501 @@
+﻿@model WebBanHang.Models.Product
+@{
+    Guid? IdRom = ViewBag.IdRom;
+    Guid? IdColor = ViewBag.IdColor;
+    var x = new double?();
+    string nameRom = "";
+    string nameColor = "";
+}
+<style>
+    .back-link {
+        padding: 10px;
+        color: #515154;
+        font-size: 13px;
+    }
+
+    .back-link a {
+        margin: 0 5px;
+        color: #515154;
+    }
+
+    .product_info_container {
+        display: flex;
+        margin: 20px;
+    }
+
+    .product_info_container .gallery{
+        width: 45%;
+    }
+    
+    .product_info_container .picture{
+        background: #F5F5F7;
+        border-radius: 8px;
+        box-shadow: 0px 0px 15px rgb(0 0 0 / 3%);
+        padding: 15px;
+    }
+    .product_info_container .picture .pic-show {
+        width: 100%;
+        height: 100%;
+        background: white;
+    }
+
+    .picture-slide img {
+        width: 85px;
+        height: 85px;
+    }
+
+    .info_container {
+        margin: 0 65px;
+        flex-grow: 1;
+    }
+
+    .name_product_title {
+        font-size: 24px;
+        color: #1D1D1F;
+        font-weight: 700;
+        line-height: 36px;
+        padding-bottom: 15px;
+        margin: 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .price_product_title{
+        margin: 10px 0;
+    }
+
+    .price_product_title .price_product {
+        color: #0066CC;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .info_container .old-price{
+        color: #86868B;
+        margin: 0 5px 0 5px;
+        font-size: 18px;
+    }
+
+    .block_quantity {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .text_specification {
+        margin-right: 10px;
+    }
+
+    .option-color a{
+        border-radius: 100%;
+        box-shadow: inset 1px 1px 2px rgb(0 0 0 / 10%);
+        width: 25px !important;
+        height: 25px !important;
+        cursor: pointer;
+        display: block;
+    }
+
+    .block_quantity__number {
+        width: 52px;
+        height: 46px;
+        border: 1px solid #ddd;
+        font-size: 18px;
+        margin-right: 10px;
+        padding: 5px;
+    }
+
+    .checkout_button {
+        font-size: 16px;
+        margin-top: 20px;
+        font-weight: bold;
+        padding: 10px;
+        cursor: pointer;
+        border: none;
+        background-color: #0066CC;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white !important;
+        text-decoration: none;
+        height: 64px;
+        border-radius: 8px;
+    }
+
+    .item-box{
+        margin: 20px 0;
+    }
+    .item-box .product-item{
+        background-color: white;
+        padding-top: 10px;
+        border-radius: 8px;
+        box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.04);
+    }
+    .item-box .product-item:hover{
+        border-color: #02010100;
+        box-shadow: 1px 1px 28px 0px rgb(0 0 0 / 12%);
+    }
+    .details{
+        padding: 5px 14px 15px 14px;
+    }
+    .details a{
+        font-weight: 600;
+        min-height: 45px;
+        font-size: 15px;
+        color: #1D1D1F;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-decoration: none;
+    }
+    .details span{
+        font-weight: 700;
+        line-height: 24px;
+    }
+
+    .details .percent, .old-price{
+        color: #86868B;
+        margin: 0 5px 0 5px;
+        font-size: 12px;
+    }
+    @@media (max-width: 1001px)
+     {
+        .product_info_container{ 
+            display: block;
+        }
+
+        .product_info_container .gallery{
+            width: 100%;
+        }
+
+        .info_container{
+            margin: 0 10px;
+        }
+    }
+</style>
+<div class="back-link">
+    <div class="container">
+        <a asp-action="" asp-controller="Home">Trang chủ</a> > <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="@Model.Menu.Id">@Model.Menu.Name</a> > <a>@Model.Name</a>
+    </div>
+</div>
+<div class="container">
+    <form>
+        <div class="product_info_container">
+            <div class="gallery">
+                <div class="picture">
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                </div>
+                <div class="picture-slide d-flex ">
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                </div>
+            </div>
+            <div class="info_container">
+                <h1 class="name_product_title">@Model.Name</h1>
+                <div class="price_product_title">
+                @if (IdColor != null || IdRom != null)
+                {
+                    x = Model.Price + Model.DetailRoms.FirstOrDefault(x => x.IdRom == IdRom).Price + Model.DetailColors.FirstOrDefault(x => x.IdColor == IdColor).Price;
+                    <span class="price_product">@x?.ToString("#,0")₫</span>
+                    @if (Model.OldPrice != null)
+                    {
+                        <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
+                    }
+                }
+                else
+                {
+                    x = Model.Price;
+                    <span class="price_product">@x?.ToString("#,0")₫</span>
+                    @if (Model.OldPrice != null)
+                    {
+                        <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
+                    }
+                }
+                </div>
+                <div class="option-rom">
+                    @if (IdRom != null)
+                    {
+                        <div>
+                            <label style="font-weight: 400; font-size: 13px; color: #515154; line-height: 20px; margin-bottom: 11px;">Dung lượng</label>
+                        </div>
+                        <div class="d-flex">
+                            @foreach (var item in Model.DetailRoms)
+                            {
+                                @if (IdRom != item.IdRomNavigation.Id)
+                                {
+                                    <a class="d-flex justify-content-center align-items-center" style="margin-right: 10px; border: 1px solid #EBEBEB; border-radius: 4px; cursor: pointer; width: 60px; height: 30px;color: #86868B; font-weight: 400; font-size: 13px;"
+                                        asp-action="Details" 
+                                        asp-controller="Products" 
+                                        asp-route-id="@Model.Id" 
+                                        asp-route-IdRom="@item.IdRomNavigation.Id" 
+                                        asp-route-IdColor=@IdColor>
+                                        @item.IdRomNavigation.Capacity
+                                    </a>
+                                }
+                                else
+                                {
+                                    nameRom = item.IdRomNavigation.Capacity;
+                                    <a class="d-flex justify-content-center align-items-center" style="margin-right: 10px; border: 1px solid #0066cc; border-radius: 4px; cursor: pointer; width: 60px; height: 30px;color: #86868B; font-weight: 400; font-size: 13px;"
+                                        asp-action="Details" 
+                                        asp-controller="Products" 
+                                        asp-route-id="@Model.Id" 
+                                        asp-route-IdRom="@item.IdRomNavigation.Id" 
+                                        asp-route-IdColor=@IdColor>
+                                        @item.IdRomNavigation.Capacity
+                                    </a>
+                                }
+
+                            }
+                        </div>
+                    }
+                </div> 
+                <div class="option-color">
+                    @if (IdColor != null)
+                    {
+                        <div>
+                            <label style="font-weight: 400; font-size: 13px; color: #515154; line-height: 20px; margin-bottom: 11px;">Màu sắc</label>
+                        </div>
+                        <div class="d-flex">
+                            @foreach (var item in Model.DetailColors)
+                            {
+                                @if (IdColor != item.IdColorNavigation.Id)
+                                {
+                                    <div style="border-radius: 100%; padding: 2px; margin-right: 10px">
+                                        <a style="background-color:@item.IdColorNavigation.ColorCode;" 
+                                        asp-action="Details" 
+                                        asp-controller="Products" 
+                                        asp-route-id="@Model.Id" 
+                                        asp-route-IdColor="@item.IdColorNavigation.Id" 
+                                        asp-route-IdRom=@IdRom>
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    nameColor = item.IdColorNavigation.Name;
+                                    <div style="border-radius: 100%; padding: 2px; border: 1px solid #0066cc; margin-right: 10px;">
+                                        <a style="background-color:@item.IdColorNavigation.ColorCode; padding: 2px;" class="text-danger"
+                                        asp-action="Details" 
+                                        asp-controller="Products" 
+                                        asp-route-id="@Model.Id" 
+                                        asp-route-IdColor="@item.IdColorNavigation.Id"
+                                        asp-route-IdRom=@IdRom>
+                                        </a>
+                                    </div>
+                                }
+
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="button_container">
+                    <a class="checkout_button" onclick="addToCart()">
+                        <span>Thêm vào giỏ</span>
+                    </a>
+                </div>
+                @if (Model.Menu.Name != "Phụ kiện" || Model.Menu.Name != "Âm thanh" )
+                {
+                    <div style="border: 1px solid #EBEBEB; border-radius: 8px; padding: 15px 16px; line-height: 20px; margin-top: 17px;">
+                        <div>
+                            <spam style="font-size: 13px; line-height: 24px; color: #515154;"><i style="color: #0066cc" class="fa-solid fa-circle-check"></i> Bộ sản phẩm gồm: Hộp, Sách hướng dẫn, Cây lấy sim, Cáp Type C </spam>
+                        </div>
+                        <div>
+                            <spam style="font-size: 13px; line-height: 24px; color: #515154;"><i style="color: #0066cc" class="fa-solid fa-circle-check"></i> Bảo hành chính hãng 1 năm </spam>
+                        </div>
+                        <div>
+                            <spam style="font-size: 13px; line-height: 24px; color: #515154;"><i style="color: #0066cc" class="fa-solid fa-circle-check"></i> Giao hàng nhanh toàn quốc  </spam>
+                        </div>
+                        <div>
+                            <spam style="font-size: 13px; line-height: 24px; color: #515154;"><i style="color: #0066cc" class="fa-solid fa-circle-check"></i> Gọi đặt mua 1900 102908 (8:00 - 22:00) </spam>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </form>
+    <div>
+        <strong>Sản phẩm tương tự</strong>
+        <div class="row">
+            <div class="col-md-3 col-6 item-box">
+                <div class="product-item">
+                    <a asp-action="Details"
+                       asp-route-id="@Model.Id"
+                       asp-controller="Products"
+                       asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
+                       asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
+                    <img style="width: 100%; height: auto" src="~/image/Product/@Model.Image" alt="@Model.Name" />
+                    </a>
+                    <div class="details">
+                        <a asp-action="Details"
+                           asp-route-id="@Model.Id"
+                           asp-controller="Products"
+                           asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
+                           asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
+                            @Model.Name
+                        </a>
+                        <div class="price">
+                        <span style="color: #0066CC; font-size: 13px;">@Model.Price.ToString("#,0")₫</span>
+                        @if (Model.OldPrice != null)
+                        {
+                            double oldPrice = double.Parse(Model.OldPrice?.ToString());
+                            double discountPercentage = (oldPrice - Model.Price) / Model.OldPrice.Value * 100;
+                            int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+                            <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
+                        }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 item-box">
+                <div class="product-item">
+                    <a asp-action="Details"
+                       asp-route-id="@Model.Id"
+                       asp-controller="Products"
+                       asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
+                       asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
+                    <img style="width: 100%; height: auto" src="~/image/Product/@Model.Image" alt="@Model.Name" />
+                    </a>
+                    <div class="details">
+                        <a asp-action="Details"
+                           asp-route-id="@Model.Id"
+                           asp-controller="Products"
+                           asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
+                           asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
+                            @Model.Name
+                        </a>
+                        <div class="price">
+                        <span style="color: #0066CC; font-size: 13px;">@Model.Price.ToString("#,0")₫</span>
+                        @if (Model.OldPrice != null)
+                        {
+                            double oldPrice = double.Parse(Model.OldPrice?.ToString());
+                            double discountPercentage = (oldPrice - Model.Price) / Model.OldPrice.Value * 100;
+                            int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+                            <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
+                        }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 item-box">
+                <div class="product-item">
+                    <a asp-action="Details"
+                       asp-route-id="@Model.Id"
+                       asp-controller="Products"
+                       asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
+                       asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
+                    <img style="width: 100%; height: auto" src="~/image/Product/@Model.Image" alt="@Model.Name" />
+                    </a>
+                    <div class="details">
+                        <a asp-action="Details"
+                           asp-route-id="@Model.Id"
+                           asp-controller="Products"
+                           asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
+                           asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
+                            @Model.Name
+                        </a>
+                        <div class="price">
+                        <span style="color: #0066CC; font-size: 13px;">@Model.Price.ToString("#,0")₫</span>
+                        @if (Model.OldPrice != null)
+                        {
+                            double oldPrice = double.Parse(Model.OldPrice?.ToString());
+                            double discountPercentage = (oldPrice - Model.Price) / Model.OldPrice.Value * 100;
+                            int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+                            <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
+                        }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 item-box">
+                <div class="product-item">
+                    <a asp-action="Details"
+                       asp-route-id="@Model.Id"
+                       asp-controller="Products"
+                       asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
+                       asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
+                    <img style="width: 100%; height: auto" src="~/image/Product/@Model.Image" alt="@Model.Name" />
+                    </a>
+                    <div class="details">
+                        <a asp-action="Details"
+                           asp-route-id="@Model.Id"
+                           asp-controller="Products"
+                           asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
+                           asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
+                            @Model.Name
+                        </a>
+                        <div class="price">
+                        <span style="color: #0066CC; font-size: 13px;">@Model.Price.ToString("#,0")₫</span>
+                        @if (Model.OldPrice != null)
+                        {
+                            double oldPrice = double.Parse(Model.OldPrice?.ToString());
+                            double discountPercentage = (oldPrice - Model.Price) / Model.OldPrice.Value * 100;
+                            int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+                            <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
+                        }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function addToCart() {
+        $.ajax({
+            type: "POST",
+            url: "/Cart/AddToCart",
+            data: {
+                id: localStorage.getItem("Cart Id"),
+                cartItems: [
+                    {
+                        price: @x,
+                        quantity: 1,
+                        productName: '@Model.Name @nameRom @nameColor',
+                        image: '@Model.Image',
+                        productId: '@Model.Id'
+                    }
+                ]
+            },
+            success: function (data, textStatus) {
+                if(!localStorage.getItem("Cart Id")) {
+                    if (data) {
+                        localStorage.setItem("Cart Id", data);
+                    }
+                } else if (data !== undefined && localStorage.getItem("Cart Id") != data) {
+                    localStorage.setItem("Cart Id", data);
+                }
+            }
+        })
+        @* var qty = $('.block_quantity__number').val();
+        var productId = '@Model.Id';
+        $.ajax({
+            type: 'GET',
+            url: '/OrderDetails/Create',
+            data: {
+                productId: productId,
+                qty: qty
+            }
+        }) *@
+    };
+
+    function buyNow() {
+        var qty = $('.block_quantity__number').val();
+        var productId = '@Model.Id';
+        var price = '@Model.Price';
+        $.ajax({
+            type: 'GET',
+            url: '/Orders/BuyNow',
+            data: {
+                productId: productId,
+                qty: qty,
+                price: price
+            },
+            success: function (response) {
+                console.log(qty + productId + price);
+                window.location.href = '/Orders/BuyNow?productId=' + productId + '&qty=' + qty + '&price=' + price;
+            }
+        })
+    }
+</script>

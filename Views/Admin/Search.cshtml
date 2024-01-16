@@ -1,0 +1,49 @@
+﻿@using WebBanHang.ViewModels
+@model List<UserWithRoleVM>
+
+<h3><a asp-action="Create">Create</a></h3>
+
+<h3>Search User by Name</h3>
+<hr />
+<form asp-action="Search" method="post">
+    Name: <input name="keyword" />
+    <input type="submit" value="Search" />
+</form>
+@if(Model != null)
+{
+    <h4>Kết quả tìm kiếm</h4>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Email</td>
+                    <td>@string.Join(", ", user.Roles)</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@user.UserId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@user.UserId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@user.UserId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h4>Không tìm thất kết quả</h4>
+}

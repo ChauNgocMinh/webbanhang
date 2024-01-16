@@ -1,0 +1,120 @@
+﻿@model List<Tuple<WebBanHang.Models.Order, List<WebBanHang.Models.OrderDetail>>>
+
+<style>
+    .order-container {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-header {
+        background-color: #3498db;
+        color: #fff;
+        padding: 12px;
+        border-radius: 5px 5px 0 0;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .product-details {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: collapse;
+    }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .table img {
+            max-width: 80px;
+            max-height: 80px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+    .order-container hr {
+        margin: 15px 0;
+        border: none;
+        border-top: 1px solid #ddd;
+    }
+
+    .total-amount {
+        text-align: right;
+        font-weight: bold;
+        font-size: 18px;
+        margin-top: 10px;
+    }
+</style>
+
+@if (Model != null && Model.Count != 0)
+{
+    <h1>Lịch sử đơn hàng</h1>
+    foreach (var orderWithDetails in Model)
+    {
+        var order = orderWithDetails.Item1;
+        var orderDetails = orderWithDetails.Item2;
+
+        <div class="order-container">
+            <div class="order-header">
+                <div>
+                    <strong>Order ID:</strong> @order.Id
+                </div>
+                <div>
+                    <strong>Created:</strong> @order.Created
+                </div>
+            </div>
+            <div class="product-details">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Ảnh</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detail in orderDetails)
+                        {
+                            <tr>
+                                <td>@detail.Product.Name</td>
+                                <td>
+                                    <img src="~/image/Product/@detail.Product.Image" class="card-img-top" alt="@detail.Product.Name" />
+                                </td>
+                                <td>@detail.Qty</td>
+                                <td>$@detail.ProductPrice</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="total-amount">
+                <strong>Tổng tiền:</strong> $@order.TotalAmount
+            </div>
+        </div>
+        <hr />
+    }
+}
+else
+{
+    <h1>
+        <i>Bạn chưa có đơn hàng nào</i>
+    </h1>
+}
