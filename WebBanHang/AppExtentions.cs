@@ -8,9 +8,11 @@ public static class AppExtentions
 {
     public static IServiceCollection AddAppDbContext(this IServiceCollection services, WebApplicationBuilder builder)
     {
-        //if (builder.Environment.IsDevelopment())
-            //return services.AddDbContext<WebBanHangContext, SqliteDbContext>();
-        return services.AddDbContext<WebBanHangContext, MsSqlDbContext>();
+        return builder.Configuration["DatabaseProvider"] switch
+        {
+            "MsSql" => services.AddDbContext<WebBanHangContext, MsSqlDbContext>(),
+            _ => services.AddDbContext<WebBanHangContext, SqliteDbContext>(),
+        };
     }
 
     public static IServiceCollection UseIdentity(this IServiceCollection services)
