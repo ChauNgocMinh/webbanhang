@@ -13,13 +13,13 @@ namespace WebBanHang.Controllers;
 public class OrdersController : Controller
 {
     private readonly WebBanHangContext _context;
-    private readonly UserManager<WebBanHangUser> _userManager;
+    private readonly UserManager<AppUser> _userManager;
 
-        public OrdersController(WebBanHangContext context, UserManager<WebBanHangUser> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
+    public OrdersController(WebBanHangContext context, UserManager<AppUser> userManager)
+    {
+        _context = context;
+        _userManager = userManager;
+    }
 
     [Authorize(Roles = "Khách Hàng")]
     // GET: Orders
@@ -107,7 +107,7 @@ public class OrdersController : Controller
     [HttpPost]
     public async Task<IActionResult> BuyNow(BuyNowVM product)
     {
-        
+
         var order = new Order();
         order.Id = Guid.NewGuid();
         order.PhoneNumber = product.PhoneNumber;
@@ -136,8 +136,8 @@ public class OrdersController : Controller
 
         return RedirectToAction(nameof(Index));
     }
-        // GET: Orders/Create
-        public IActionResult Create()
+    // GET: Orders/Create
+    public IActionResult Create()
     {
         return View();
     }
@@ -152,13 +152,13 @@ public class OrdersController : Controller
         {
             TotalAmount += item.ProductPrice;
         }
-       
+
         order.Id = Guid.NewGuid();
         order.Created = DateTime.Now;
         order.TotalAmount = TotalAmount;
         _context.Add(order);
         await _context.SaveChangesAsync();
-        
+
         foreach (var item in ListItem)
         {
             item.OrderId = order.Id;
@@ -252,15 +252,15 @@ public class OrdersController : Controller
         {
             _context.Orders.Remove(order);
         }
-        
+
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
     private bool OrderExists(Guid id)
     {
-      return (_context.Orders?.Any(e => e.Id == id)).GetValueOrDefault();
+        return (_context.Orders?.Any(e => e.Id == id)).GetValueOrDefault();
     }
 
-    
+
 }
