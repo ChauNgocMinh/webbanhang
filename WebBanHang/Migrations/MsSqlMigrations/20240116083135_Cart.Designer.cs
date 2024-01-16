@@ -12,8 +12,8 @@ using WebBanHang.Models;
 namespace WebBanHang.Migrations.MsSqlMigrations
 {
     [DbContext(typeof(MsSqlDbContext))]
-    [Migration("20240116051010_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240116083135_Cart")]
+    partial class Cart
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -230,10 +230,58 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("WebBanHang.Models.Cart", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("WebBanHang.Models.CartItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CartId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.ToTable("CartItems");
+                });
+
             modelBuilder.Entity("WebBanHang.Models.Color", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ColorCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -251,16 +299,18 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("IdProduct")
+                    b.Property<Guid?>("IdColor")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("IdProductColor")
+                    b.Property<Guid?>("IdProduct")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdColor");
 
                     b.HasIndex("IdProduct");
 
@@ -411,8 +461,8 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Capacity")
-                        .HasColumnType("int");
+                    b.Property<string>("Capacity")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -470,25 +520,32 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WebBanHang.Models.CartItem", b =>
+                {
+                    b.HasOne("WebBanHang.Models.Cart", "Cart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+                });
+
             modelBuilder.Entity("WebBanHang.Models.DetailColor", b =>
                 {
-                    b.HasOne("WebBanHang.Models.Color", "ProductColor")
-                        .WithMany("Colors")
-                        .HasForeignKey("IdProduct")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
+                    b.HasOne("WebBanHang.Models.Color", "IdColorNavigation")
+                        .WithMany("DetailColors")
+                        .HasForeignKey("IdColor")
                         .HasConstraintName("FK_DetailColor_Color");
 
-                    b.HasOne("WebBanHang.Models.Product", "Product")
-                        .WithMany("Colors")
+                    b.HasOne("WebBanHang.Models.Product", "IdProductNavigation")
+                        .WithMany("DetailColors")
                         .HasForeignKey("IdProduct")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK_DetailColor_Product");
 
-                    b.Navigation("Product");
+                    b.Navigation("IdColorNavigation");
 
-                    b.Navigation("ProductColor");
+                    b.Navigation("IdProductNavigation");
                 });
 
             modelBuilder.Entity("WebBanHang.Models.DetailRom", b =>
@@ -538,9 +595,14 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.Navigation("Menu");
                 });
 
+            modelBuilder.Entity("WebBanHang.Models.Cart", b =>
+                {
+                    b.Navigation("CartItems");
+                });
+
             modelBuilder.Entity("WebBanHang.Models.Color", b =>
                 {
-                    b.Navigation("Colors");
+                    b.Navigation("DetailColors");
                 });
 
             modelBuilder.Entity("WebBanHang.Models.Menu", b =>
@@ -555,7 +617,7 @@ namespace WebBanHang.Migrations.MsSqlMigrations
 
             modelBuilder.Entity("WebBanHang.Models.Product", b =>
                 {
-                    b.Navigation("Colors");
+                    b.Navigation("DetailColors");
 
                     b.Navigation("DetailRoms");
 

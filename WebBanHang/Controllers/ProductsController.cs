@@ -45,7 +45,7 @@ public class ProductsController : Controller
                 .Where(x => x.IdProduct == product.Id)
                 .OrderBy(x => x.Price)
                 .FirstOrDefaultAsync();
-            IdRom = Rom.IdRom;
+            IdRom = Rom?.IdRom;
         }
         if (IdColor == null)
         {
@@ -53,7 +53,7 @@ public class ProductsController : Controller
                 .Where(x => x.IdProduct == product.Id)
                 .OrderBy(x => x.Price)
                 .FirstOrDefaultAsync();
-            IdColor = Color.IdColor;
+            IdColor = Color?.IdColor;
         }
         var color = await _context.DetailRoms.ToListAsync();
         if (product == null)

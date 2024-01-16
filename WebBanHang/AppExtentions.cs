@@ -105,7 +105,15 @@ public static class AppExtentions
     {
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
+
         var context = services.GetRequiredService<WebBanHangContext>();
+
+        context = app.Configuration["DatabaseProvider"] switch
+        {
+            "MsSql" => services.GetRequiredService<MsSqlDbContext>(),
+            _ => services.GetRequiredService<SqliteDbContext>(),
+        };
+        
         var logger = services.GetRequiredService<ILogger<Program>>();
 
         try

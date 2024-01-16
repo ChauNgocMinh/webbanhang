@@ -78,6 +78,7 @@
                             <div class="card-body d-flex flex-column">
                                 <a class="card-text" asp-action="Details" asp-route-id="@item.Id">@item.Name</a>
                                 <h5 class="card-title">$@item.Price.00</h5>
+                                @* TODO: Sua lai cai nay *@
                                 <a class="btn btn-primary mt-auto" asp-action="AddItemToCart" asp-route-id="@item.Id">Add to cart</a>
                             </div>
                         </div>

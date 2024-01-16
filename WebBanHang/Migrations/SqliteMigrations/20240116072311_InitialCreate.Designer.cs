@@ -11,7 +11,7 @@ using WebBanHang.Models;
 namespace WebBanHang.Migrations.SqliteMigrations
 {
     [DbContext(typeof(SqliteDbContext))]
-    [Migration("20240115102012_InitialCreate")]
+    [Migration("20240116072311_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -224,6 +224,10 @@ namespace WebBanHang.Migrations.SqliteMigrations
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ColorCode")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -240,16 +244,18 @@ namespace WebBanHang.Migrations.SqliteMigrations
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("IdProduct")
+                    b.Property<Guid?>("IdColor")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("IdProductColor")
+                    b.Property<Guid?>("IdProduct")
                         .HasColumnType("TEXT");
 
                     b.Property<double>("Price")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdColor");
 
                     b.HasIndex("IdProduct");
 
@@ -400,8 +406,8 @@ namespace WebBanHang.Migrations.SqliteMigrations
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("Capacity")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Capacity")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -461,23 +467,19 @@ namespace WebBanHang.Migrations.SqliteMigrations
 
             modelBuilder.Entity("WebBanHang.Models.DetailColor", b =>
                 {
-                    b.HasOne("WebBanHang.Models.Color", "ProductColor")
-                        .WithMany("Colors")
+                    b.HasOne("WebBanHang.Models.Color", "IdColorNavigation")
+                        .WithMany("DetailColors")
+                        .HasForeignKey("IdColor")
+                        .HasConstraintName("FK_DetailRom_Color");
+
+                    b.HasOne("WebBanHang.Models.Product", "IdProductNavigation")
+                        .WithMany("DetailColors")
                         .HasForeignKey("IdProduct")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_DetailColor_Color");
+                        .HasConstraintName("FK_DetailRom_Product");
 
-                    b.HasOne("WebBanHang.Models.Product", "Product")
-                        .WithMany("Colors")
-                        .HasForeignKey("IdProduct")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK_DetailColor_Product");
+                    b.Navigation("IdColorNavigation");
 
-                    b.Navigation("Product");
-
-                    b.Navigation("ProductColor");
+                    b.Navigation("IdProductNavigation");
                 });
 
             modelBuilder.Entity("WebBanHang.Models.DetailRom", b =>
@@ -529,7 +531,7 @@ namespace WebBanHang.Migrations.SqliteMigrations
 
             modelBuilder.Entity("WebBanHang.Models.Color", b =>
                 {
-                    b.Navigation("Colors");
+                    b.Navigation("DetailColors");
                 });
 
             modelBuilder.Entity("WebBanHang.Models.Menu", b =>
@@ -544,7 +546,7 @@ namespace WebBanHang.Migrations.SqliteMigrations
 
             modelBuilder.Entity("WebBanHang.Models.Product", b =>
                 {
-                    b.Navigation("Colors");
+                    b.Navigation("DetailColors");
 
                     b.Navigation("DetailRoms");
 

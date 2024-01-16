@@ -181,7 +181,7 @@
                             @if (this.User.IsInRole("Khách Hàng"))
                             {
                                 <li class="">
-                                    <a style="text-decoration: none; color: #212529;" class="nav-link" asp-area="" asp-controller="OrderDetails" asp-action="Index">
+                                    <a style="text-decoration: none; color: #212529;" onclick="getShoppingCart()" role="button">
                                         <i style="color: white" class="fa-solid fa-cart-shopping"></i>
                                     </a>
                                 </li>
@@ -229,7 +229,7 @@
                         else
                         {
                             <li class="">
-                                <a style="text-decoration: none; color: #212529;" class="nav-link" asp-area="" asp-controller="OrderDetails" asp-action="Index">
+                                <a style="text-decoration: none; color: #212529;" class="nav-link" onclick="getShoppingCart()" role="button">
                                     <i style="color: white" class="fa-solid fa-cart-shopping"></i>
                                 </a>
                             </li>
