@@ -285,8 +285,8 @@
                     }
                 </div>
                 <div class="button_container">
-                    <a class="checkout_button" onclick="buyNow()">
-                        <span>MUA NGAY</span>
+                    <a class="checkout_button" onclick="addToCart()">
+                        <span>Thêm vào giỏ</span>
                     </a>
                 </div>
                 @if (Model.Menu.Name != "Phụ kiện" || Model.Menu.Name != "Âm thanh" )
@@ -437,7 +437,32 @@
 </div>
 <script>
     function addToCart() {
-        var qty = $('.block_quantity__number').val();
+        $.ajax({
+            type: "POST",
+            url: "/Cart/AddToCart",
+            data: {
+                id: localStorage.getItem("Cart Id"),
+                cartItems: [
+                    {
+                        price: @Model.Price,
+                        quantity: 1,
+                        productName: '@Model.Name',
+                        image: '@Model.Image',
+                        productId: '@Model.Id'
+                    }
+                ]
+            },
+            success: function (data, textStatus) {
+                if(!localStorage.getItem("Cart Id")) {
+                    if (data) {
+                        localStorage.setItem("Cart Id", data);
+                    }
+                } else if (data !== undefined && localStorage.getItem("Cart Id") != data) {
+                    localStorage.setItem("Cart Id", data);
+                }
+            }
+        })
+        @* var qty = $('.block_quantity__number').val();
         var productId = '@Model.Id';
         $.ajax({
             type: 'GET',
@@ -446,8 +471,9 @@
                 productId: productId,
                 qty: qty
             }
-        })
+        }) *@
     };
+
     function buyNow() {
         var qty = $('.block_quantity__number').val();
         var productId = '@Model.Id';
