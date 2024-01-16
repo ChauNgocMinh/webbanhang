@@ -10,7 +10,7 @@ public class MsSqlDbContext : WebBanHangContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        options.UseSqlServer(Configuration.GetConnectionString("WebBanHangContextConnection"));
+        options.UseSqlServer(Configuration.GetConnectionString("MsSqlConn"));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -11,7 +11,7 @@ public class SqliteDbContext : WebBanHangContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        options.UseSqlite(Configuration.GetConnectionString("Development"));
+        options.UseSqlite(Configuration.GetConnectionString("SqliteConn"));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
