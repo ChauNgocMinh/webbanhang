@@ -283,12 +283,12 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                 {
                     table.PrimaryKey("PK_DetailColor", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DetailRom_Color",
+                        name: "FK_DetailColor_Color",
                         column: x => x.IdColor,
                         principalTable: "Color",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_DetailRom_Product",
+                        name: "FK_DetailColor_Product",
                         column: x => x.IdProduct,
                         principalTable: "Product",
                         principalColumn: "Id");

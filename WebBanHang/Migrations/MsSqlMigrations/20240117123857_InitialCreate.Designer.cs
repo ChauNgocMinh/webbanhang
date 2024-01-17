@@ -12,7 +12,7 @@ using WebBanHang.Models;
 namespace WebBanHang.Migrations.MsSqlMigrations
 {
     [DbContext(typeof(MsSqlDbContext))]
-    [Migration("20240117073912_InitialCreate")]
+    [Migration("20240117123857_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -541,12 +541,12 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.HasOne("WebBanHang.Models.Color", "IdColorNavigation")
                         .WithMany("DetailColors")
                         .HasForeignKey("IdColor")
-                        .HasConstraintName("FK_DetailRom_Color");
+                        .HasConstraintName("FK_DetailColor_Color");
 
                     b.HasOne("WebBanHang.Models.Product", "IdProductNavigation")
                         .WithMany("DetailColors")
                         .HasForeignKey("IdProduct")
-                        .HasConstraintName("FK_DetailRom_Product");
+                        .HasConstraintName("FK_DetailColor_Product");
 
                     b.Navigation("IdColorNavigation");
 

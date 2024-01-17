@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 #nullable disable
 
@@ -21,11 +22,11 @@ public abstract class WebBanHangContext : IdentityDbContext<AppUser, AppRole, st
     public DbSet<DetailColor> DetailColors { get; set; }
     public DbSet<DetailRom> DetailRoms { get; set; }
     public DbSet<Menu> Menus { get; set; }
-    public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderDetail> OrderDetails { get; set; }
     public DbSet<Rom> Roms { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
+    public virtual DbSet<InfoOrder> InfoOrders { get; set; } = null!;
+    public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -51,12 +52,12 @@ public abstract class WebBanHangContext : IdentityDbContext<AppUser, AppRole, st
             entity.HasOne(d => d.IdProductNavigation)
                 .WithMany(p => p.DetailColors)
                 .HasForeignKey(d => d.IdProduct)
-                .HasConstraintName("FK_DetailRom_Product");
+                .HasConstraintName("FK_DetailColor_Product");
 
             entity.HasOne(d => d.IdColorNavigation)
                 .WithMany(p => p.DetailColors)
                 .HasForeignKey(d => d.IdColor)
-                .HasConstraintName("FK_DetailRom_Color");
+                .HasConstraintName("FK_DetailColor_Color");
         });
 
         builder.Entity<DetailRom>(entity =>
@@ -85,37 +86,7 @@ public abstract class WebBanHangContext : IdentityDbContext<AppUser, AppRole, st
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
-        builder.Entity<Order>(entity =>
-        {
-            entity.ToTable("Order");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
-            entity.Property(e => e.Created).HasPrecision(1);
-        });
-
-        builder.Entity<OrderDetail>(entity =>
-        {
-            entity.ToTable("OrderDetail");
-
-            entity.HasIndex(e => e.OrderId, "IX_OrderDetail_OrderId");
-
-            entity.HasIndex(e => e.ProductId, "IX_OrderDetail_ProductId");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
-            entity.Property(e => e.Email).HasMaxLength(50);
-
-            entity.HasOne(d => d.Order)
-                .WithMany(p => p.OrderDetails)
-                .HasForeignKey(d => d.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(d => d.Product)
-                .WithMany(p => p.OrderDetails)
-                .HasForeignKey(d => d.ProductId);
-        });
-
+        
         builder.Entity<Product>(entity =>
         {
             entity.ToTable("Product");
@@ -139,6 +110,36 @@ public abstract class WebBanHangContext : IdentityDbContext<AppUser, AppRole, st
             entity.Property(e => e.Id).ValueGeneratedNever();
         });
 
+        builder.Entity<OrderItem>(entity =>
+        {
+            entity.ToTable("OrderItem");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(d => d.InfoOrder)
+                .WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.InfoOrderId)
+                .HasConstraintName("FK__OrderItem__Info");
+        });
+
+        builder.Entity<InfoOrder>(entity =>
+        {
+            entity.ToTable("InfoOrder");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.Property(e => e.Address).HasMaxLength(150);
+
+            entity.Property(e => e.City).HasMaxLength(50);
+
+            entity.Property(e => e.District).HasMaxLength(50);
+
+            entity.Property(e => e.Email).HasMaxLength(100);
+
+            entity.Property(e => e.Name).HasMaxLength(100);
+
+            entity.Property(e => e.Phone).HasMaxLength(10);
+        });
 
         builder.Entity<AppUser>()
             .HasMany(u => u.UserRoles)

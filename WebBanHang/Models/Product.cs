@@ -20,5 +20,4 @@ public class Product
     public virtual Menu? Menu { get; set; }
     public HashSet<DetailColor> DetailColors { get; set; } = new();
     public HashSet<DetailRom> DetailRoms { get; set; } = new();
-    public List<OrderDetail> OrderDetails { get; set; } = new();
 }

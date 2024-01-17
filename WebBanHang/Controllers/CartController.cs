@@ -30,6 +30,11 @@ public class CartController : Controller
     [HttpPost]
     public async Task<IActionResult> AddToCart(CartViewModel cartViewModel)
     {
+        if (cartViewModel.CartItems == null || cartViewModel.CartItems.Count == 0)
+        {
+            return BadRequest("CartItems cannot be empty.");
+        }
+
         var cart = new Cart();
 
         if (cartViewModel.Id != null && cartViewModel.Id != Guid.Empty)
@@ -38,21 +43,33 @@ public class CartController : Controller
                 .FirstOrDefaultAsync(c => c.Id == cartViewModel.Id) ?? new Cart();
         }
 
-        var cartItems = cartViewModel.CartItems.Select(cvm => new CartItem
+        foreach (var cartItemViewModel in cartViewModel.CartItems)
         {
-            Price = cvm.Price,
-            Quantity = cvm.Quantity,
-            ProductId = cvm.ProductId,
-            ProductName = cvm.ProductName,
-            Image = cvm.Image,
-        }).ToList();
+            var existingCartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductName == cartItemViewModel.ProductName);
 
-        if (cartItems.Count > 0)
-        {
-            cart.CartItems.AddRange(cartItems);
+            if (existingCartItem != null)
+            {
+                existingCartItem.Quantity += 1;
+                existingCartItem.Price += cartItemViewModel.Price;
+            }
+            else
+            {
+                var newCartItem = new CartItem
+                {
+                    Price = cartItemViewModel.Price,
+                    Quantity = 1,
+                    ProductId = cartItemViewModel.ProductId,
+                    ProductName = cartItemViewModel.ProductName,
+                    Image = cartItemViewModel.Image,
+                };
+
+                cart.CartItems.Add(newCartItem);
+            }
         }
-
-        _context.Add(cart);
+        if (cartViewModel.Id == null || cartViewModel.Id == Guid.Empty)
+        {
+            _context.Add(cart);
+        }
 
         await _context.SaveChangesAsync();
 

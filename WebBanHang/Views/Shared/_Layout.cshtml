@@ -118,11 +118,6 @@
     .collapseShow {
         display: none;
     }
-
-   /*  .footer{
-        background-color: #1d1d1f;
-    } */
-
     
     @@media(max-width: 992px){
         .collapseShow {
@@ -140,6 +135,15 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
             <div class="container">
+                <div class="collapseShow">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <i class="fa-solid fa-bars"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web bán hàng</a>
                
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -250,11 +254,12 @@
                         }
                     </ul>
                 </div>
+
                 <div class="collapseShow">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link">
-                                <i class="fa-solid fa-bars"></i>
+                        <li class="">
+                            <a style="text-decoration: none; color: #212529;" class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">
+                                <i style="color: white; font-size: 17px" class="fa-solid fa-cart-shopping"></i>
                             </a>
                         </li>
                     </ul>
@@ -282,9 +287,6 @@
                         <i class="fab fa-facebook-f"></i>
                     </a>
                     <a href="" class="text-white me-4">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="" class="text-white me-4">
                         <i class="fab fa-google"></i>
                     </a>
                     <a href="" class="text-white me-4">
@@ -292,9 +294,6 @@
                     </a>
                     <a href="" class="text-white me-4">
                         <i class="fab fa-linkedin"></i>
-                    </a>
-                    <a href="" class="text-white me-4">
-                        <i class="fab fa-github"></i>
                     </a>
                 </div>
             </section>
