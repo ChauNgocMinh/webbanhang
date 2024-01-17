@@ -1,6 +1,6 @@
-﻿@using WebBanHang.ViewModels
-@model List<UserWithRoleVM>
+﻿@model List<AppUser>
 @{
+    ViewData["Title"] = "Administration";
     Layout = "_Layout";
 }
 
@@ -50,7 +50,7 @@
             <tr>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Email</th>
+                <th>UserName</th>
                 <th>Roles</th>
                 <th>Action</th>
             </tr>
@@ -61,12 +61,15 @@
                 <tr>
                     <td>@user.FirstName</td>
                     <td>@user.LastName</td>
-                    <td>@user.Email</td>
-                    <td>@string.Join(", ", user.Roles)</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-warning btn-sm">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-danger btn-sm">Delete</a>
-                    </td>
+                    <td>@user.UserName</td>
+                    <td>@string.Join(", ", user.UserRoles.Select(ur => ur.Role).Select(r => r.Name).ToList())</td>
+                    @if (user.UserName != "admin")
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

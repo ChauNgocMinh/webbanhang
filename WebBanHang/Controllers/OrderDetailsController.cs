@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 //using WebBanHang.Areas.Identity.Data;
 using WebBanHang.Models;
 
+#nullable disable
+
 namespace WebBanHang.Controllers;
 
 [Authorize(Roles = "Khách Hàng")]
@@ -52,7 +54,7 @@ public class OrderDetailsController : Controller
     {
         var itemOrderDetail = _context.OrderDetails.Where(x => x.ProductId == productId && x.Status == true && x.Email == _userManager.GetUserName(User)).FirstOrDefault();
         var itemProduct = _context.Products.Where(x => x.Id == productId).FirstOrDefault();
-        OrderDetail orderDetail = new OrderDetail();
+        OrderDetail orderDetail = new();
         if (itemOrderDetail != null)
         {
             itemOrderDetail.Qty += qty;

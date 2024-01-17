@@ -1,4 +1,6 @@
-﻿namespace WebBanHang.ViewModels
+﻿#nullable disable
+
+namespace WebBanHang.ViewModels
 {
     public class UserWithRoleVM
     {

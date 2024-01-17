@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebBanHang.Migrations.Seeding;
 using WebBanHang.Models;
 
 namespace WebBanHang;
@@ -94,8 +95,8 @@ public static class AppExtentions
             options.ExpireTimeSpan = TimeSpan.FromMinutes(expireMinutes);
 
             // TODO: change path here
-            options.LoginPath = "/Identity/Account/Login";
-            options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            options.LoginPath = "/Account/Login";
+            options.AccessDeniedPath = "/Account/AccessDenied";
             options.SlidingExpiration = true;
         });
         return services;
@@ -113,7 +114,7 @@ public static class AppExtentions
             "MsSql" => services.GetRequiredService<MsSqlDbContext>(),
             _ => services.GetRequiredService<SqliteDbContext>(),
         };
-        
+
         var logger = services.GetRequiredService<ILogger<Program>>();
 
         try
@@ -123,6 +124,28 @@ public static class AppExtentions
         catch (Exception ex)
         {
             logger.LogError("An error occured during migration with error details below: {}", ex.Message);
+            logger.LogError("{}", ex.StackTrace);
+        }
+    }
+
+    public async static Task SeedAppData(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var services = scope.ServiceProvider;
+
+        var userManager = services.GetRequiredService<UserManager<AppUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+
+        var logger = services.GetRequiredService<ILogger<Program>>();
+
+        try
+        {
+            await DataSeeding.CreateRolesAsync(roleManager);
+            await DataSeeding.CreateAppAdminAsync(userManager);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An error occured during seeding with error details below: {}", ex.Message);
             logger.LogError("{}", ex.StackTrace);
         }
     }

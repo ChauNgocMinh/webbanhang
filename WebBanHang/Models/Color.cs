@@ -1,5 +1,7 @@
 ﻿namespace WebBanHang.Models;
 
+#nullable disable
+
 public class Color
 {
     public Guid Id { get; set; }

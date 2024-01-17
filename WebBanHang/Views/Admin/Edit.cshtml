@@ -1,39 +1,38 @@
-﻿@using WebBanHang.ViewModels
-@model UserWithRoleVM
+﻿@model WebBanHang.ViewModels.EditUserViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit User";
 }
 
-<h2>Edit User Roles</h2>
+<h2>Edit User</h2>
 
 <form asp-action="Edit" method="post">
     <div class="form-group">
-        <label asp-for="UserId">User ID:</label>
+        <label asp-for="UserId">ID</label>
         <input asp-for="UserId" class="form-control" readonly />
     </div>
 
     <div class="form-group">
-        <label asp-for="FirstName">First Name:</label>
-        <input asp-for="FirstName" class="form-control" readonly />
+        <label asp-for="UserName">Tên tài khoản</label>
+        <input asp-for="UserName" class="form-control" readonly />
     </div>
 
     <div class="form-group">
-        <label asp-for="LastName">Last Name:</label>
-        <input asp-for="LastName" class="form-control" readonly />
+        <label asp-for="LastName">Họ</label>
+        <input asp-for="LastName" class="form-control" />
     </div>
 
     <div class="form-group">
-        <label asp-for="Email">Email:</label>
-        <input asp-for="Email" class="form-control" readonly />
+        <label asp-for="FirstName">Tên</label>
+        <input asp-for="FirstName" class="form-control" />
     </div>
 
     <div class="form-group">
-        <label asp-for="Roles">Roles:</label>
-        <select asp-for="Roles" asp-items="@(new SelectList(ViewBag.RoleList))" class=" form-select" aria-required="true">
+        <label asp-for="Roles">Chức vụ</label>
+        <select asp-for="Roles" asp-items="@ViewBag.Roles" class="form-select" aria-required="true">
         </select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Update Roles</button>
+    <button type="submit" class="btn btn-primary">Update</button>
 </form>
 

@@ -5,6 +5,8 @@ using WebBanHang.ViewModels;
 
 namespace WebBanHang.Controllers;
 
+#nullable disable
+
 public class RoleController : Controller
 {
     private readonly RoleManager<IdentityRole> _roleManager;
@@ -44,7 +46,7 @@ public class RoleController : Controller
     }
 
     // GET: RoleController/Create
-    public async Task<IActionResult> Create()
+    public IActionResult Create()
     {
         return View();
     }
@@ -131,7 +133,7 @@ public class RoleController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Search(string keyword)
+    public IActionResult Search(string keyword)
     {
         IQueryable<IdentityRole> data = _roleManager.Roles.AsQueryable();
         if (!string.IsNullOrEmpty(keyword))

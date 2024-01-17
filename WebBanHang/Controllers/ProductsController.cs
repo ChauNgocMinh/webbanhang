@@ -5,6 +5,8 @@ using WebBanHang.Models;
 
 namespace WebBanHang.Controllers;
 
+#nullable disable
+
 public class ProductsController : Controller
 {
     private readonly WebBanHangContext _context;
@@ -217,7 +219,7 @@ public class ProductsController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Search(string keyword)
+    public IActionResult Search(string keyword)
     {
         if (!string.IsNullOrEmpty(keyword))
         {
@@ -244,7 +246,7 @@ public class ProductsController : Controller
         return View(await products.ToListAsync());
     }
 
-    public async Task<IActionResult> SearchInMenu(string id, string keyword)
+    public IActionResult SearchInMenu(string id, string keyword)
     {
         if (!string.IsNullOrEmpty(keyword))
         {

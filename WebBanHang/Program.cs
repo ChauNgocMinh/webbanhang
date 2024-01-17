@@ -52,4 +52,6 @@ app.MapRazorPages();
 
 await app.ApplyMigrations();
 
+await app.SeedAppData();
+
 app.Run();
