@@ -16,7 +16,7 @@ public class Product
     public DateTime? Created { get; set; }
     [NotMapped]
     [Display(Name = "Choose Image")]
-    public IFormFile ImageFile { get; set; }
+    public IFormFile ImageFile { get; set; } = null!;
     public virtual Menu? Menu { get; set; }
     public HashSet<DetailColor> DetailColors { get; set; } = new();
     public HashSet<DetailRom> DetailRoms { get; set; } = new();

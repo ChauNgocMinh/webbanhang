@@ -48,6 +48,7 @@ namespace WebBanHang.Controllers
         }
         public async Task<IActionResult> GetByMenu(string id)
         {
+            #nullable disable
             ViewBag.MenuId = id;
             var products = await _context.Products
                 .Include(p => p.Menu)

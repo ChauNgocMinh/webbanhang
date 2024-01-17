@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+#nullable disable
+
 namespace WebBanHang.ViewModels
 {
     public class RoleVM
