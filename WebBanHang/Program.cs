@@ -3,9 +3,9 @@ using WebBanHang;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAppDbContext(builder);
+builder.Services.AddAppDbContext(builder.Configuration);
 
-builder.Services.UseIdentity();
+builder.Services.AddIdentity(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -19,8 +19,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
-builder.Services.ConfigIdentity(builder);
 
 var app = builder.Build();
 
