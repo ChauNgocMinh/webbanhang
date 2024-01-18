@@ -182,53 +182,22 @@
                     <ul class="navbar-nav">
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            @if (this.User.IsInRole("Khách Hàng"))
-                            {
-                                <li class="">
-                                    <a style="text-decoration: none; color: #212529;" onclick="getShoppingCart()" role="button">
-                                        <i style="color: white" class="fa-solid fa-cart-shopping"></i>
-                                    </a>
-                                </li>
-                                <li class="nav-item user-dropdown">
-                                    <a id="manage" class="nav-link user-dropdown-toggle" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                        @* Hello @UserManager.GetUserName(User)! *@
-                                        <i class="fa-regular fa-user"></i>
-                                    </a>
-                                    <ul class="user-dropdown-menu">
-                                        <li class="user-dropdown-item">
-                                            <a style="text-decoration: none; color: #212529;" asp-area="Identity" asp-page="/Account/Manage/Index">Thông tin cá nhân</a>
-                                        </li>
-                                        
-                                        <li class="user-dropdown-item">
-                                            <a style="text-decoration: none; color: #212529;" asp-area="" asp-controller="Orders" asp-action="Index">Đơn đã đặt</a>
-                                        </li>
-                                        <li class="user-dropdown-item">
-                                            <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Customer", new { area = "" })">
-                                                <button id="logout" type="submit" class="btn btn-link user-dropdown-item">Logout</button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item user-dropdown">
-                                    <a id="manage" class="nav-link user-dropdown-toggle" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                        @* Hello @UserManager.GetUserName(User)! *@
-                                        <i class="fa-regular fa-user"></i>
-                                    </a>
-                                    <ul class="user-dropdown-menu">
-                                        <li class="user-dropdown-item">
-                                            <a style="text-decoration: none; color: #212529;" asp-area="Identity" asp-page="/Account/Manage/Index">Thông tin cá nhân</a>
-                                        </li>
-                                        <li class="user-dropdown-item">
-                                            <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Customer", new { area = "" })">
-                                                <button id="logout" type="submit" class="btn btn-link user-dropdown-item">Logout</button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </li>
-                            }
+                            <li class="nav-item user-dropdown">
+                                <a class="nav-link user-dropdown-toggle" href="#">
+                                    <i class="fa-regular fa-user"></i>
+                                </a>
+                                <ul class="user-dropdown-menu">
+                                    <li class="user-dropdown-item">
+                                        <h6 class="text-muted">@UserManager.GetUserName(User)</h6>
+                                    </li>
+                                    <hr>
+                                    <li class="user-dropdown-item">
+                                        <form asp-controller="Admin" asp-action="Logout" method="post" asp-route-returnUrl="@Url.Action("Index", "Home")">
+                                            <button id="logout" type="submit" class="btn btn-link user-dropdown-item">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
                         }
                         else
                         {
@@ -238,18 +207,9 @@
                                 </a>
                             </li>
                             <li class="nav-item user-dropdown">
-                                <a id="manage" class="nav-link user-dropdown-toggle">
-                                    @* Hello @UserManager.GetUserName(User)! *@
+                                <a class="nav-link user-dropdown-toggle" title="Đăng nhập vào hệ thống" asp-controller="Admin" asp-action="Login">
                                     <i style="color: white" class="fa-regular fa-user"></i>
                                 </a>
-                                <ul class="user-dropdown-menu">
-                                    <li class="user-dropdown-item">
-                                        <a style="text-decoration: none; color: #212529;" id="register" asp-area="Identity" asp-page="/Account/Register">Đăng ký</a>
-                                    </li>
-                                    <li class="user-dropdown-item">
-                                        <a style="text-decoration: none; color: #212529;" id="login" asp-area="Identity" asp-page="/Account/Login">Đăng nhập</a>
-                                    </li>
-                                </ul>
                             </li>
                         }
                     </ul>
