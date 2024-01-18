@@ -34,6 +34,7 @@ public class AdminController : Controller
     }
 
     [HttpGet]
+    [Authorize(Policy = "Only System Admin Role")]
     public async Task<IActionResult> Create()
     {
         ViewBag.Roles = await _roleManager.Roles.Select(x => new SelectListItem
@@ -46,6 +47,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "Only System Admin Role")]
     public async Task<IActionResult> Create(CreateUserViewModel createUser)
     {
         if (!ModelState.IsValid) return RedirectToAction("Create");
@@ -70,6 +72,7 @@ public class AdminController : Controller
     }
 
     [HttpGet]
+    [Authorize(Policy = "Only System Admin Role")]
     public async Task<IActionResult> Edit(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
@@ -98,6 +101,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "Only System Admin Role")]
     public async Task<IActionResult> Edit(EditUserViewModel model)
     {
         if (!ModelState.IsValid)
@@ -202,6 +206,12 @@ public class AdminController : Controller
     {
         await _signInManager.SignOutAsync();
         return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 
     // [HttpPost]

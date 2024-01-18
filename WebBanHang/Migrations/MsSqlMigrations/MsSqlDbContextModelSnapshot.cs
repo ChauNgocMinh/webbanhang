@@ -436,7 +436,7 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("Created")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("datetime");
 
                     b.Property<Guid?>("IdRom")

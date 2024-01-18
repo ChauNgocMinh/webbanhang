@@ -1,4 +1,7 @@
-﻿@model List<AppUser>
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@model List<AppUser>
+
 @{
     ViewData["Title"] = "Administration";
     Layout = "_Layout";
@@ -63,7 +66,7 @@
                     <td>@user.LastName</td>
                     <td>@user.UserName</td>
                     <td>@string.Join(", ", user.UserRoles.Select(ur => ur.Role).Select(r => r.Name).ToList())</td>
-                    @if (user.UserName != "admin")
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "Only System Admin Role")).Succeeded && user.UserName != "admin")
                     {
                         <td>
                             <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning btn-sm">Edit</a>

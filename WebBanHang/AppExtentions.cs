@@ -117,4 +117,16 @@ public static class AppExtentions
             logger.LogError("{}", ex.StackTrace);
         }
     }
+
+    public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Only System Admin Role", policy =>
+            {
+                policy.RequireRole("System Admin");
+            });
+        });
+        return services;
+    }
 }
