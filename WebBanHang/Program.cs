@@ -3,9 +3,9 @@ using WebBanHang;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAppDbContext(builder);
+builder.Services.AddAppDbContext(builder.Configuration);
 
-builder.Services.UseIdentity();
+builder.Services.AddIdentity(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -20,7 +20,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.ConfigIdentity(builder);
+builder.Services.AddAuthorizationPolicies();
 
 var app = builder.Build();
 
@@ -48,7 +48,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages();
+// app.MapRazorPages();
 
 await app.ApplyMigrations();
 

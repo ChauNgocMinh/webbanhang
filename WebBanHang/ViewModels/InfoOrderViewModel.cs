@@ -1,5 +1,7 @@
 ﻿using WebBanHang.Models;
 
+#nullable disable
+
 namespace WebBanHang.ViewModels
 {
     public class InfoOrderViewModel

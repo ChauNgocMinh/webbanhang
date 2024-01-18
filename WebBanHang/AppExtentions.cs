@@ -7,98 +7,66 @@ namespace WebBanHang;
 
 public static class AppExtentions
 {
-    public static IServiceCollection AddAppDbContext(this IServiceCollection services, WebApplicationBuilder builder)
+    public static IServiceCollection AddAppDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        return builder.Configuration["DatabaseProvider"] switch
+        return configuration.GetValue<string>("DatabaseProvider") switch
         {
-            "MsSql" => services.AddDbContext<WebBanHangContext, MsSqlDbContext>(),
-            _ => services.AddDbContext<WebBanHangContext, SqliteDbContext>(),
+            "Sqlite" => services.AddDbContext<WebBanHangContext, SqliteDbContext>(),
+            _ => services.AddDbContext<WebBanHangContext, MsSqlDbContext>(),
         };
     }
 
-    public static IServiceCollection UseIdentity(this IServiceCollection services)
+    public static IServiceCollection AddIdentity(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDefaultIdentity<AppUser>(options =>
+        services.AddIdentity<AppUser, AppRole>(options =>
         {
             // Add options here
+            options.SignIn.RequireConfirmedAccount = configuration.GetSection("Identity:Options:SignIn").GetValue<bool>("RequireConfirmedAccount");
         })
-        .AddRoles<AppRole>()
-        .AddEntityFrameworkStores<WebBanHangContext>()
-        .AddSignInManager<SignInManager<AppUser>>();
-        return services;
-    }
+            .AddEntityFrameworkStores<WebBanHangContext>()
+            .AddDefaultTokenProviders();
 
-    public static IServiceCollection ConfigIdentity(this IServiceCollection services, WebApplicationBuilder builder)
-    {
-        if (builder.Environment.IsDevelopment())
-            return ConfigIdentityForDevelopment(services);
-        return ConfigIdentityForProduction(services);
-    }
-
-    private static IServiceCollection ConfigIdentityForDevelopment(IServiceCollection services)
-    {
-        services.Configure<IdentityOptions>(options =>
-        {
-            // Password settings.
-            options.Password.RequireDigit = false;
-            options.Password.RequireLowercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequiredLength = 6;
-
-            // Lockout settings.
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            options.Lockout.MaxFailedAccessAttempts = 1000;
-            options.Lockout.AllowedForNewUsers = false;
-
-            // User settings.
-            options.User.RequireUniqueEmail = false;
-        });
-
-        return ConfigCookieForIdentity(services, 99999);
-    }
-
-    private static IServiceCollection ConfigIdentityForProduction(IServiceCollection services)
-    {
         services.Configure<IdentityOptions>(options =>
         {
             // Configure more if needed
 
+            var passwordSettingsConfig = configuration.GetSection("Identity:Options:Password");
+
             // Password settings.
-            options.Password.RequireDigit = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequireNonAlphanumeric = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequiredLength = 6;
-            options.Password.RequiredUniqueChars = 1;
+            options.Password.RequireDigit = passwordSettingsConfig.GetValue<bool>("RequireDigit");
+            options.Password.RequireLowercase = passwordSettingsConfig.GetValue<bool>("RequireLowercase");
+            options.Password.RequireNonAlphanumeric = passwordSettingsConfig.GetValue<bool>("RequireNonAlphanumeric");
+            options.Password.RequireUppercase = passwordSettingsConfig.GetValue<bool>("RequireUppercase");
+            options.Password.RequiredLength = passwordSettingsConfig.GetValue<int>("RequiredLength");
+            options.Password.RequiredUniqueChars = passwordSettingsConfig.GetValue<int>("RequiredUniqueChars");
+
+            var lockoutSettingsConfig = configuration.GetSection("Identity:Options:Lockout");
 
             // Lockout settings.
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            options.Lockout.MaxFailedAccessAttempts = 5;
-            options.Lockout.AllowedForNewUsers = true;
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(lockoutSettingsConfig.GetValue<double>("DefaultLockoutTimeSpanMinutes"));
+            options.Lockout.MaxFailedAccessAttempts = lockoutSettingsConfig.GetValue<int>("MaxFailedAccessAttempts");
+            options.Lockout.AllowedForNewUsers = lockoutSettingsConfig.GetValue<bool>("AllowedForNewUsers");
+
+            var userSettingsConfig = configuration.GetSection("Identity:Options:User");
 
             // User settings.
-            options.User.AllowedUserNameCharacters =
-            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            options.User.RequireUniqueEmail = false;
+            options.User.AllowedUserNameCharacters = userSettingsConfig.GetValue<string>("AllowedUserNameCharacters");
+            options.User.RequireUniqueEmail = userSettingsConfig.GetValue<bool>("RequireUniqueEmail");
         });
 
-        return ConfigCookieForIdentity(services, 100);
-    }
-
-    private static IServiceCollection ConfigCookieForIdentity(IServiceCollection services, double expireMinutes = 5)
-    {
         services.ConfigureApplicationCookie(options =>
         {
-            // Cookie settings
-            options.Cookie.HttpOnly = true;
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(expireMinutes);
+            var cookieSettingsConfig = configuration.GetSection("Identity:Cookie");
+            // Settings for cookie authentication
+            options.Cookie.HttpOnly = cookieSettingsConfig.GetValue<bool>("HttpOnly");
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(cookieSettingsConfig.GetValue<double>("ExpireMinutes"));
 
-            // TODO: change path here
-            options.LoginPath = "/Account/Login";
-            options.AccessDeniedPath = "/Account/AccessDenied";
+            options.LoginPath = "/Admin/Login";
+            options.LogoutPath = "/Admin/Logout";
+            options.AccessDeniedPath = "/Admin/AccessDenied";
             options.SlidingExpiration = true;
         });
+
         return services;
     }
 
@@ -109,10 +77,10 @@ public static class AppExtentions
 
         var context = services.GetRequiredService<WebBanHangContext>();
 
-        context = app.Configuration["DatabaseProvider"] switch
+        context = app.Configuration.GetValue<string>("DatabaseProvider") switch
         {
-            "MsSql" => services.GetRequiredService<MsSqlDbContext>(),
-            _ => services.GetRequiredService<SqliteDbContext>(),
+            "Sqlite" => services.GetRequiredService<SqliteDbContext>(),
+            _ => services.GetRequiredService<MsSqlDbContext>(),
         };
 
         var logger = services.GetRequiredService<ILogger<Program>>();
@@ -148,5 +116,17 @@ public static class AppExtentions
             logger.LogError("An error occured during seeding with error details below: {}", ex.Message);
             logger.LogError("{}", ex.StackTrace);
         }
+    }
+
+    public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Only System Admin Role", policy =>
+            {
+                policy.RequireRole("System Admin");
+            });
+        });
+        return services;
     }
 }

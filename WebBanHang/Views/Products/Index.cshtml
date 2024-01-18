@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<WebBanHang.Models.Product>
 
 @{
-    ViewData["Title"] = "Product Index";
+    ViewData["Title"] = "Products";
 }
 
 <style>
@@ -98,7 +98,6 @@
                     <td>@Html.DisplayFor(modelItem => item.Menu.Name)</td>
                     <td class="action-links">
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>

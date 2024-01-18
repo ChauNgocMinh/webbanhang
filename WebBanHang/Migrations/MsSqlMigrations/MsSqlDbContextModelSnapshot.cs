@@ -339,6 +339,52 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.ToTable("DetailRom", (string)null);
                 });
 
+            modelBuilder.Entity("WebBanHang.Models.InfoOrder", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("District")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool?>("PaymentMethod")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Total")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InfoOrder", (string)null);
+                });
+
             modelBuilder.Entity("WebBanHang.Models.Menu", b =>
                 {
                     b.Property<Guid>("Id")
@@ -353,69 +399,36 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.ToTable("Menu", (string)null);
                 });
 
-            modelBuilder.Entity("WebBanHang.Models.Order", b =>
+            modelBuilder.Entity("WebBanHang.Models.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Image")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Created")
-                        .HasPrecision(1)
-                        .HasColumnType("datetime2(1)");
+                    b.Property<Guid?>("InfoOrderId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("TotalAmount")
+                    b.Property<double?>("Price")
                         .HasColumnType("float");
+
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Order", (string)null);
-                });
+                    b.HasIndex("InfoOrderId");
 
-            modelBuilder.Entity("WebBanHang.Models.OrderDetail", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double?>("ProductPrice")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("Qty")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("Status")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex(new[] { "OrderId" }, "IX_OrderDetail_OrderId");
-
-                    b.HasIndex(new[] { "ProductId" }, "IX_OrderDetail_ProductId");
-
-                    b.ToTable("OrderDetail", (string)null);
+                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("WebBanHang.Models.Product", b =>
@@ -423,7 +436,7 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("Created")
+                    b.Property<DateTime>("Created")
                         .HasColumnType("datetime");
 
                     b.Property<Guid?>("IdRom")
@@ -568,22 +581,14 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.Navigation("IdRomNavigation");
                 });
 
-            modelBuilder.Entity("WebBanHang.Models.OrderDetail", b =>
+            modelBuilder.Entity("WebBanHang.Models.OrderItem", b =>
                 {
-                    b.HasOne("WebBanHang.Models.Order", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("WebBanHang.Models.InfoOrder", "InfoOrder")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("InfoOrderId")
+                        .HasConstraintName("FK__OrderItem__Info");
 
-                    b.HasOne("WebBanHang.Models.Product", "Product")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
+                    b.Navigation("InfoOrder");
                 });
 
             modelBuilder.Entity("WebBanHang.Models.Product", b =>
@@ -618,14 +623,14 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.Navigation("DetailColors");
                 });
 
+            modelBuilder.Entity("WebBanHang.Models.InfoOrder", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
             modelBuilder.Entity("WebBanHang.Models.Menu", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("WebBanHang.Models.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("WebBanHang.Models.Product", b =>
@@ -633,8 +638,6 @@ namespace WebBanHang.Migrations.MsSqlMigrations
                     b.Navigation("DetailColors");
 
                     b.Navigation("DetailRoms");
-
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("WebBanHang.Models.Rom", b =>

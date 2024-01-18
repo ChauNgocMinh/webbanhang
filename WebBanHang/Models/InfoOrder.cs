@@ -17,6 +17,6 @@ namespace WebBanHang.Models
         public float? Total { get; set; }
         public DateTime? Date { get; set; }
 
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = null!;
     }
 }

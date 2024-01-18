@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,15 +8,18 @@ using WebBanHang.ViewModels;
 
 namespace WebBanHang.Controllers;
 
+[Authorize]
 public class AdminController : Controller
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly RoleManager<AppRole> _roleManager;
+    private readonly SignInManager<AppUser> _signInManager;
 
-    public AdminController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+    public AdminController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _signInManager = signInManager;
     }
 
     [HttpGet]
@@ -30,6 +34,7 @@ public class AdminController : Controller
     }
 
     [HttpGet]
+    [Authorize(Policy = "Only System Admin Role")]
     public async Task<IActionResult> Create()
     {
         ViewBag.Roles = await _roleManager.Roles.Select(x => new SelectListItem
@@ -42,6 +47,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "Only System Admin Role")]
     public async Task<IActionResult> Create(CreateUserViewModel createUser)
     {
         if (!ModelState.IsValid) return RedirectToAction("Create");
@@ -66,6 +72,7 @@ public class AdminController : Controller
     }
 
     [HttpGet]
+    [Authorize(Policy = "Only System Admin Role")]
     public async Task<IActionResult> Edit(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
@@ -94,6 +101,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "Only System Admin Role")]
     public async Task<IActionResult> Edit(EditUserViewModel model)
     {
         if (!ModelState.IsValid)
@@ -169,6 +177,41 @@ public class AdminController : Controller
         }
 
         return View("Error");
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult Login()
+    {
+        return View(new LoginAdminViewModel());
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> Login(LoginAdminViewModel viewModel)
+    {
+        var signInResult = await _signInManager.PasswordSignInAsync(viewModel.UserName, viewModel.Password, false, false);
+
+        if (!signInResult.Succeeded)
+        {
+            // TODO: Add Errors here
+            return RedirectToAction("Login");
+        }
+
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 
     // [HttpPost]
