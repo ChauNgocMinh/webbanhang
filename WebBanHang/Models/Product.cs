@@ -14,6 +14,7 @@ public class Product
     public Guid? IdRom { get; set; }
     public double? OldPrice { get; set; }
     public DateTime Created { get; set; } = DateTime.Now;
+    public virtual ICollection<Image> Images { get; set; }
     public virtual Menu? Menu { get; set; }
     public HashSet<DetailColor> DetailColors { get; set; } = new();
     public HashSet<DetailRom> DetailRoms { get; set; } = new();

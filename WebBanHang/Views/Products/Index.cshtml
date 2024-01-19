@@ -79,11 +79,10 @@
     <table class="table table-bordered table-striped">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">@Html.DisplayNameFor(model => model.Name)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.Image)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.Price)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.Number)</th>
-                <th scope="col">@Html.DisplayNameFor(model => model.Menu)</th>
+                <th scope="col">Tên</th>
+                <th scope="col">Ảnh</th>
+                <th scope="col">Giá</th>
+                <th scope="col">Menu</th>
                 <th scope="col" class="action">Action</th>
             </tr>
         </thead>
@@ -94,7 +93,6 @@
                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
                     <td><img src="~/image/Product/@item.Image" alt="@item.Name" /></td>
                     <td>@Html.DisplayFor(modelItem => item.Price)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Number)</td>
                     <td>@Html.DisplayFor(modelItem => item.Menu.Name)</td>
                     <td class="action-links">
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>

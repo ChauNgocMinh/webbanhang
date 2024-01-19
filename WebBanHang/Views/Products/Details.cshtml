@@ -23,23 +23,27 @@
         margin: 20px;
     }
 
-        .product_info_container .gallery {
-            width: 45%;
-        }
+    .product_info_container .gallery {
+        width: 45%;
+    }
 
-        .product_info_container .picture {
-            background: #F5F5F7;
-            border-radius: 8px;
-            box-shadow: 0px 0px 15px rgb(0 0 0 / 3%);
-            padding: 15px;
-        }
+    .product_info_container .picture {
+        background: #F5F5F7;
+        border-radius: 8px;
+        box-shadow: 0px 0px 15px rgb(0 0 0 / 3%);
+        padding: 15px;
+    }
 
-            .product_info_container .picture .pic-show {
-                width: 100%;
-                height: 100%;
-                background: white;
-            }
+    .product_info_container .picture .pic-show {
+        width: 100%;
+        height: 100%;
+        background: white;
+    }
 
+    .picture-slide{
+        width:100%;
+        overflow: auto;
+    }
     .picture-slide img {
         width: 85px;
         height: 85px;
@@ -188,14 +192,14 @@
         <div class="product_info_container">
             <div class="gallery">
                 <div class="picture">
-                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                    <img class="pic-show main-pic" data-url="/image/Product/@Model.Image" src="/image/Product/@Model.Image" />
                 </div>
-                <div class="picture-slide d-flex ">
-                    <img class="pic-show" src="~/image/Product/@Model.Image" />
-                    <img class="pic-show" src="~/image/Product/@Model.Image" />
-                    <img class="pic-show" src="~/image/Product/@Model.Image" />
-                    <img class="pic-show" src="~/image/Product/@Model.Image" />
-                    <img class="pic-show" src="~/image/Product/@Model.Image" />
+                <div class="picture-slide d-flex">
+                    <img class="pic-show" data-url="/image/Product/@Model.Image" src="/image/Product/@Model.Image" />
+                    @foreach (var item in Model.Images)
+                    {
+                        <img class="pic-show" data-url="/image/Product/@item.Img" src="/image/Product/@item.Img" />
+                    }
                 </div>
             </div>
             <div class="info_container">
@@ -478,6 +482,8 @@
             }
         })
     }
+
+
     // function buyNow() {
     //     var qty = $('.block_quantity__number').val();
     //     var productId = '@Model.Id';
@@ -497,3 +503,20 @@
     //     })
     // }
 </script>
+@section Scripts {
+    <script>
+        // Lấy tất cả các thẻ <img> có class "pic-show"
+        const picShowImages = document.querySelectorAll('.pic-show');
+
+        // Lặp qua từng thẻ và thêm sự kiện click
+        picShowImages.forEach(img => {
+            img.addEventListener('click', function () {
+                // Lấy đường dẫn từ thuộc tính data-url
+                const imageUrl = this.getAttribute('data-url');
+
+                // Gán đường dẫn cho thẻ <img> chính
+                document.querySelector('.main-pic').setAttribute('src', imageUrl);
+            });
+        });
+    </script>
+}
