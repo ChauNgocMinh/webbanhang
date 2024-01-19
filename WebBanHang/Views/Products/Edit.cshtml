@@ -3,79 +3,128 @@
 @{
     ViewData["Title"] = "Edit Product";
 }
+<style>
+    @@media (max-width: 768px) {
+        .col-md-6 {
+            width: 100%;
+        }
+    }
 
-<div class="container mt-4">
-    <h2>Chỉnh sửa thông tin sản phẩm @Model.Name</h2>
+    .img-preview {
+        transition: transform 0.3s ease-in-out;
+    }
 
-    <div class="row">
-        <div class="col-md-6">
+    .img-preview:hover {
+        transform: scale(1.1);
+    }
+
+    .table th {
+        background-color: #f2f2f2; /* Màu nền cho các thẻ th trong bảng */
+    }
+
+    .table td {
+        background-color: #ffffff; /* Màu nền cho các ô trong bảng */
+    }
+</style>
+
+<div class="container" style="padding-top: 20px; padding-bottom: 20px;">
+    <h2 class="text-center">Chỉnh sửa thông tin sản phẩm</h2>
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-8">
             <form asp-action="Edit" enctype="multipart/form-data" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                @Html.Hidden("ProductId", Model.ProductId)
+                @Html.HiddenFor(model => model.ProductId)
 
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label">Tên Sản Phẩm</label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Tên Sản Phẩm</th>
+                            <td>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Danh Mục</th>
+                            <td>
+                                <select asp-for="MenuId" class="form-control" asp-items="ViewBag.MenuName">
+                                    <option disabled selected>Chọn Danh Mục</option>
+                                </select>
+                                <span asp-validation-for="MenuId" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Hình Ảnh</th>
+                            <td>
+                                <input asp-for="ImageFile" class="form-control" type="file" id="imgProduct" accept="image/*" value=""/>
+                                <img src="@Model.OldImage" class="img-thumbnail img-preview" id="imgPreview"/>
+                                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Giá</th>
+                            <td>
+                                <input asp-for="Price" class="form-control" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Giá cũ</th>
+                            <td>
+                                <input asp-for="OldPrice" class="form-control" />
+                                <span asp-validation-for="OldPrice" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Số Lượng</th>
+                            <td>
+                                <input asp-for="Number" class="form-control" />
+                                <span asp-validation-for="Number" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        @* <tr>
+                            <th scope="row">Màu sắc</th>
+                            <td>
+                                <input asp-for="Number" class="form-control" />
+                                <span asp-validation-for="Number" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Bộ nhớ trong</th>
+                            <td>
+                                <input asp-for="Number" class="form-control" />
+                                <span asp-validation-for="Number" class="text-danger"></span>
+                            </td>
+                        </tr> *@
+                    </tbody>
+                </table>
 
-                <div class="form-group">
-                    <label asp-for="MenuId" class="control-label">Danh Mục</label>
-                    <select asp-for="MenuId" class="form-control" asp-items="ViewBag.MenuName">
-                        <option disabled selected>Chọn Danh Mục</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="ImageFile" class="control-label">Hình Ảnh</label>
-                    <input asp-for="ImageFile" class="form-control" type="file" id="imgProduct" accept="image/*" value=""/>
-                    <img src="@Model.OldImage" class="img-thumbnail" id="imgPreview"/>
-                    <span asp-validation-for="ImageFile" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Price" class="control-label">Giá</label>
-                    <input asp-for="Price" class="form-control" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
-                </div>
-
-                 <div class="form-group">
-                    <label asp-for="OldPrice" class="control-label">Giá cũ</label>
-                    <input asp-for="OldPrice" class="form-control" />
-                    <span asp-validation-for="OldPrice" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="Number" class="control-label">Số Lượng</label>
-                    <input asp-for="Number" class="form-control" />
-                    <span asp-validation-for="Number" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
+                <div class="form-group text-center">
                     <button type="submit" class="btn btn-primary">Cập Nhật</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="mt-2">
+    <div class="text-center mt-2">
         <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
     </div>
 </div>
 
-<script>
-    let imgProduct = document.getElementById("imgProduct");
-    let imgPreview = document.getElementById("imgPreview");
-
-    imgProduct.onchange = evt => {
-    const [file] = imgProduct.files;
-        if (file) {
-            imgPreview.src = URL.createObjectURL(file)
-        }
-    }
-</script>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        let imgProduct = document.getElementById("imgProduct");
+        let imgPreview = document.getElementById("imgPreview");
+
+        imgProduct.onchange = evt => {
+            const [file] = imgProduct.files;
+            if (file) {
+                imgPreview.src = URL.createObjectURL(file);
+            }
+        };
+    </script>
 }

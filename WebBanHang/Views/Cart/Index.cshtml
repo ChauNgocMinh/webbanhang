@@ -296,8 +296,9 @@
             url: "/Order/Buy?CartId=" + localStorage.getItem("Cart Id"),
             data: orderViewModel,  
             success: function (result) {
-                window.location.href = '/Cart?Id=' + localStorage.getItem("Cart Id");
-            }
+                console.log(result);
+                window.location.href = result;
+            },
         });
     };
 </script>

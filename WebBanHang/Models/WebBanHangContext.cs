@@ -77,6 +77,18 @@ public abstract class WebBanHangContext : IdentityDbContext<AppUser, AppRole, st
                 .HasConstraintName("FK_DetailRom_Rom");
         });
 
+        builder.Entity<Image>(entity =>
+        {
+            entity.ToTable("Image");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(d => d.IdProductNavigation)
+                .WithMany(p => p.Images)
+                .HasForeignKey(d => d.IdProduct)
+                .HasConstraintName("FK_Image_Product");
+        });
+
         builder.Entity<Menu>(entity =>
         {
             entity.ToTable("Menu");

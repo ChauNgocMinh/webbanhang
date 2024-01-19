@@ -20,7 +20,6 @@ public class ProductsController : Controller
         _webHost = webHost;
     }
 
-    // GET: Products
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -29,7 +28,6 @@ public class ProductsController : Controller
     }
 
     [AllowAnonymous]
-    // GET: Products/Details/5
     public async Task<IActionResult> Details(Guid id, [FromQuery] Guid? IdRom, [FromQuery] Guid? IdColor)
     {
         var product = await _context.Products
@@ -38,6 +36,7 @@ public class ProductsController : Controller
             .ThenInclude(dr => dr.IdRomNavigation)
             .Include(x => x.DetailColors)
             .ThenInclude(xx => xx.IdColorNavigation)
+            .Include(a => a.Images)
             .FirstOrDefaultAsync(m => m.Id == id);
 
         if (product == null)
@@ -111,7 +110,13 @@ public class ProductsController : Controller
     // GET: Products/Edit/5
     public async Task<IActionResult> Edit(Guid id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products
+                                    .Include(p => p.Menu)
+                                    .Include(p => p.DetailRoms)
+                                    .ThenInclude(dr => dr.IdRomNavigation)
+                                    .Include(x => x.DetailColors)
+                                    .ThenInclude(xx => xx.IdColorNavigation)
+                                    .FirstOrDefaultAsync(m => m.Id == id);
 
         if (product == null)
         {
@@ -142,7 +147,8 @@ public class ProductsController : Controller
             // TODO: ADD error for model state
             return RedirectToAction("Edit");
 
-        var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == viewModel.ProductId);
+        var product = await _context.Products
+            .FirstOrDefaultAsync(p => p.Id == viewModel.ProductId);
 
         if (product == null)
         {
@@ -203,7 +209,10 @@ public class ProductsController : Controller
     [HttpPost, ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
-        var product = await _context.Products.FindAsync(id);
+        var product = await _context.Products
+            .Include(p => p.DetailColors)
+            .Include(p=>p.DetailRoms)
+            .FirstOrDefaultAsync(p=>p.Id == id);
 
         if (product == null)
         {

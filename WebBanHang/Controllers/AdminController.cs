@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using WebBanHang.Models;
 using WebBanHang.ViewModels;
 
@@ -28,6 +30,18 @@ public class AdminController : Controller
         var users = await _userManager.Users
             .Include(u => u.UserRoles)
                 .ThenInclude(ur => ur.Role)
+            .ToListAsync();
+
+        return View(users);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SearchUserByName(string keyword)
+    {
+        var users = await _userManager.Users
+            .Where(x => string.IsNullOrEmpty(keyword) ? true : x.UserName == keyword)
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
             .ToListAsync();
 
         return View(users);
@@ -190,6 +204,15 @@ public class AdminController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginAdminViewModel viewModel)
     {
+        var allUsers = _userManager.Users.ToList();
+
+
+        var userToChangePassword = _userManager.Users.FirstOrDefault();
+        var newPassword = "123Aa!"; 
+
+        var result = await _userManager.ChangePasswordAsync(userToChangePassword, newPassword, newPassword);
+
+
         var signInResult = await _signInManager.PasswordSignInAsync(viewModel.UserName, viewModel.Password, false, false);
 
         if (!signInResult.Succeeded)

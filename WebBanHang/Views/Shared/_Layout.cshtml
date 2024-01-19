@@ -118,7 +118,14 @@
     .collapseShow {
         display: none;
     }
-    
+
+    #dropdownMenu {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-in-out;
+        display: none;
+    }
+
     @@media(max-width: 992px){
         .collapseShow {
             display: block;
@@ -126,6 +133,10 @@
 
         .navbar-nav .nav-link {
             padding: 17px;
+        }
+
+        #dropdownMenu{
+            display: block;
         }
     }
 
@@ -135,7 +146,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
             <div class="container">
-                <div class="collapseShow">
+                <div class="collapseShow" id="toggleButton">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link">
@@ -144,30 +155,29 @@
                         </li>
                     </ul>
                 </div>
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Web bán hàng</a>
+                <a class="navbar-brand" style="height: 100%" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img style="height:50px" src=" /image/Logo.png" />
+                </a>
                
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Menus" asp-action="Index">Menu</a>
+                            <a class="nav-link" asp-action="GetByMenu" asp-controller="Products" asp-route-id="7F9351B3-F8E3-4526-82B3-DEC7BAC5316E">iPhone</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Menus" asp-action="Index">iPhone</a>
+                            <a class="nav-link" asp-action="GetByMenu" asp-controller="Products" asp-route-id="D59BB95E-8772-42E6-96F3-6087D67B3CF4">IPad</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Menus" asp-action="Index">IPad</a>
+                            <a class="nav-link" asp-action="GetByMenu" asp-controller="Products" asp-route-id="36C999A5-06E8-4A55-A32B-CA985D8894BB">Mac</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Menus" asp-action="Index">Mac</a>
+                            <a class="nav-link" asp-action="GetByMenu" asp-controller="Products" asp-route-id="92312A61-CEA1-4153-8ADF-59E9A94AD8D5">Watch</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Menus" asp-action="Index">Watch</a>
+                            <a class="nav-link" asp-action="GetByMenu" asp-controller="Products" asp-route-id="3EFE8B69-486B-43A4-9BD3-42AE66BBC74E">Âm thanh</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link">Âm thanh</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link">Phụ kiện</a>
+                            <a class="nav-link" asp-action="GetByMenu" asp-controller="Products" asp-route-id="77EC3ACC-617B-49A4-AD94-BD7BD11751F6">Phụ kiện</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link">Tin tức</a>
@@ -180,9 +190,6 @@
                         </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Products" asp-action="Index">Quản lí sản phẩm</a>
-                            </li>
                         }
                     </ul>
                     <ul class="navbar-nav">
@@ -193,11 +200,23 @@
                                     <i class="fa-regular fa-user"></i>
                                 </a>
                                 <ul class="user-dropdown-menu">
-                                    <li class="user-dropdown-item">
+                                    @* <li class="nav-item">
                                         <h6 class="text-muted">@UserManager.GetUserName(User)</h6>
                                     </li>
-                                    <hr>
-                                    <li class="user-dropdown-item">
+                                    <hr style="margin: 2px 0;"> *@
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Products" asp-action="Index">Quản lí sản phẩm</a>
+                                    </li>
+                                    <hr style="margin: 2px 0;">
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Admin" asp-action="Index">Quản lí người dùng</a>
+                                    </li>
+                                    <hr style="margin: 2px 0;">
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Order" asp-action="Index">Quản lí đơn hàng</a>
+                                    </li>
+                                    <hr style="margin: 2px 0;">
+                                    <li class="nav-item">
                                         <form asp-controller="Admin" asp-action="Logout" method="post" asp-route-returnUrl="@Url.Action("Index", "Home")">
                                             <button id="logout" type="submit" class="btn btn-link user-dropdown-item">Logout</button>
                                         </form>
@@ -231,11 +250,45 @@
                     </ul>
                 </div>
             </div>
+
+            <div class="w-100 dropdown" id="dropdownMenu" style="background: white">
+                <div class="collapseShow">
+                    <ul class="navbar-nav">
+                        <li style="border-bottom: 1px solid #212529;">
+                            <a class="nav-link" style="color: black !important;" asp-action="GetByMenu" asp-controller="Products" asp-route-id="7F9351B3-F8E3-4526-82B3-DEC7BAC5316E">iPhone</a>
+                        </li>
+                        <li style="border-bottom: 1px solid #212529;">
+                            <a class="nav-link" style="color: black !important;" asp-action="GetByMenu" asp-controller="Products" asp-route-id="D59BB95E-8772-42E6-96F3-6087D67B3CF4">IPad</a>
+                        </li>
+                        <li style="border-bottom: 1px solid #212529;">
+                            <a class="nav-link" style="color: black !important;" asp-action="GetByMenu" asp-controller="Products" asp-route-id="36C999A5-06E8-4A55-A32B-CA985D8894BB">Mac</a>
+                        </li>
+                        <li style="border-bottom: 1px solid #212529;">
+                            <a class="nav-link" style="color: black !important;" asp-action="GetByMenu" asp-controller="Products" asp-route-id="92312A61-CEA1-4153-8ADF-59E9A94AD8D5">Watch</a>
+                        </li>
+                        <li style="border-bottom: 1px solid #212529;">
+                            <a class="nav-link" style="color: black !important;">Âm thanh</a>
+                        </li>
+                        <li style="border-bottom: 1px solid #212529;">
+                            <a class="nav-link" style="color: black !important;">Phụ kiện</a>
+                        </li>
+                        <li style="border-bottom: 1px solid #212529;">
+                            <a class="nav-link" style="color: black !important;">Tin tức</a>
+                        </li>
+                        <li style="border-bottom: 1px solid #212529;">
+                            <a class="nav-link" style="color: black !important;">Dịch vụ</a>
+                        </li>
+                        <li style="border-bottom: 1px solid #212529;">
+                            <a class="nav-link" style="color: black !important;">Khuyến mãi</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </nav>
     </header>
 
 
-    <main style="margin: 57px 0 0 0;" role="main">
+    <main style="margin: 57px 0 0 0; min-height: 74vh" role="main">
             @RenderBody()
     </main>
    

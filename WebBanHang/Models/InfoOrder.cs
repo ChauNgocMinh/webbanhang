@@ -14,7 +14,7 @@ namespace WebBanHang.Models
         public string? City { get; set; }
         public string? District { get; set; }
         public string? Address { get; set; }
-        public float? Total { get; set; }
+        public double? Total { get; set; }
         public DateTime? Date { get; set; }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; } = null!;

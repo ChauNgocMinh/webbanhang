@@ -23,4 +23,6 @@ public class EditProductViewModel
     public double? OldPrice { get; set; }
     
     public int? Number { get; set; }
+
+
 }

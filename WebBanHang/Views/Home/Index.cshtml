@@ -5,163 +5,202 @@
 }
 
 <style>
-* {box-sizing: border-box}
-body {font-family: Verdana, sans-serif; margin:0}
-.mySlides {display: none}
-img {vertical-align: middle;}
-
-/* Slideshow container */
-.slideshow-container {
-    max-width: 100%;
-    max-height: 100%;
-    position: relative;
-    margin: auto;
-    overflow: hidden; /* Để đảm bảo không có nội dung tràn ra khỏi khu vực chứa */
-  }
-
-  /* Slides */
-  .mySlides {
-    display: none;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* Next & previous buttons */
-  .prev, .next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    width: auto;
-    padding: 16px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.6s ease;
-    border-radius: 0;
-    user-select: none;
-    text-decoration: none;
-    margin: 0 60px;
-  }
-
-  /* Position the "next button" on the right */
-  .next {
-    right: 0;
-    border-radius: 0;
-  }
-
-  /* On hover, add a black background color with a little bit see-through */
-  .prev:hover, .next:hover {
-    background-color: rgba(0,0,0,0.8);
-  }
-
-/* The dots/bullets/indicators */
-.dot {
-  cursor: pointer;
-  height: 10px;
-  width: 10px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
-}
-
-.active, .dot:hover {
-  background-color: #717171;
-}
-
-/* Fading animation */
-.fade {
-  animation-name: fade; 
-  animation-duration: 2.5s;
-}
-.currentSlide{
-    bottom: 0;
-    position: absolute;
-    width: 100%;
-}
-
-.title{
-    font-weight: 700;
-    font-size: 25px;
-    line-height: 45px;
-    color: #1D1D1F;
-    padding-top: 15px;
-}
-
-.item-box{
-    margin: 20px 0;
-}
-.item-box .product-item{
-    background-color: white;
-    padding-top: 10px;
-    border-radius: 8px;
-    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.04);
-}
-.item-box .product-item:hover{
-    border-color: #02010100;
-    box-shadow: 1px 1px 28px 0px rgb(0 0 0 / 12%);
-}
-.details{
-    padding: 5px 14px 15px 14px;
-}
-.details a{
-    font-weight: 600;
-    min-height: 45px;
-    font-size: 15px;
-    color: #1D1D1F;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-decoration: none;
-}
-.details span{
-    font-weight: 700;
-    line-height: 24px;
-}
-
-.details .percent, .old-price{
-    color: #86868B;
-    margin: 0 5px 0 5px;
-    font-size: 12px;
-}
-.show-all a{
-    text-decoration: none;
-    border: 1px solid #0066CC;
-    border-radius: 8px;
-    padding: 5.5px 45px;
-    color: #0066CC;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 27px;
-    display: inline-block;
-    vertical-align: middle;
-}
-.show-all a:hover{
-    color: #fff;
-    background: #0066CC;
-}
-@@keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
-}
-
-/* On smaller screens, decrease text size */
-@@media (max-width: 767px) {
-    .details .percent, .old-price {
-        margin: 0;
-        font-size: 10px;
+    * {
+        box-sizing: border-box
     }
-}
-@@media only screen and (max-width: 300px) {
-  .prev, .next,.text {font-size: 11px}
-}
+
+    body {
+        font-family: Verdana, sans-serif;
+        margin: 0
+    }
+
+    .mySlides {
+        display: none
+    }
+
+    img {
+        vertical-align: middle;
+    }
+
+    /* Slideshow container */
+    .slideshow-container {
+        max-width: 100%;
+        max-height: 100%;
+        position: relative;
+        margin: auto;
+        overflow: hidden; /* Để đảm bảo không có nội dung tràn ra khỏi khu vực chứa */
+    }
+
+    /* Slides */
+    .mySlides {
+        display: none;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Next & previous buttons */
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        padding: 16px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0;
+        user-select: none;
+        text-decoration: none;
+        margin: 0 60px;
+    }
+
+    /* Position the "next button" on the right */
+    .next {
+        right: 0;
+        border-radius: 0;
+    }
+
+        /* On hover, add a black background color with a little bit see-through */
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+    /* The dots/bullets/indicators */
+    .dot {
+        cursor: pointer;
+        height: 10px;
+        width: 10px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+
+        .active, .dot:hover {
+            background-color: #717171;
+        }
+
+    /* Fading animation */
+    .fade {
+        animation-name: fade;
+        animation-duration: 2.5s;
+    }
+
+    .currentSlide {
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+    }
+
+    .title {
+        font-weight: 700;
+        font-size: 25px;
+        line-height: 45px;
+        color: #1D1D1F;
+        padding-top: 15px;
+    }
+
+    .item-box {
+        margin: 20px 0;
+    }
+
+        .item-box .product-item {
+            background-color: white;
+            padding-top: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.04);
+        }
+
+            .item-box .product-item:hover {
+                border-color: #02010100;
+                box-shadow: 1px 1px 28px 0px rgb(0 0 0 / 12%);
+            }
+
+    .details {
+        padding: 5px 14px 15px 14px;
+    }
+
+        .details a {
+            font-weight: 600;
+            min-height: 45px;
+            font-size: 15px;
+            color: #1D1D1F;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .details span {
+            font-weight: 700;
+            line-height: 24px;
+        }
+
+        .details .percent, .old-price {
+            color: #86868B;
+            margin: 0 5px 0 5px;
+            font-size: 12px;
+        }
+
+    .show-all a {
+        text-decoration: none;
+        border: 1px solid #0066CC;
+        border-radius: 8px;
+        padding: 5.5px 45px;
+        color: #0066CC;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 27px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+        .show-all a:hover {
+            color: #fff;
+            background: #0066CC;
+        }
+
+    @@keyframes fade {
+        from {
+            opacity: .4
+        }
+
+        to {
+            opacity: 1
+        }
+    }
+
+    /* On smaller screens, decrease text size */
+    @@media (max-width: 767px) {
+        .details .percent, .old-price {
+            margin: 0;
+            font-size: 10px;
+        }
+
+        .mySlides {
+            display: flex;
+            justify-content: center;
+        }
+
+            .mySlides img {
+                height: 350px;
+                overflow: hidden;
+            }
+    }
+
+    @@media only screen and (max-width: 300px) {
+        .prev, .next, .text {
+            font-size: 11px
+        }
+    }
 </style>
 
 <div class="slideshow-container">
 
-    <div class="mySlides fade">
+    <div class="mySlides fade" style="display: block;">
         <img src="https://shopdunk.com/images/uploaded/banner/banner_thang1_2024/airpc.png" style="width:100%">
     </div>
 
@@ -176,10 +215,10 @@ img {vertical-align: middle;}
     <a class="prev" onclick="plusSlides(-1)">❮</a>
     <a class="next" onclick="plusSlides(1)">❯</a>
     <div class="currentSlide" style="text-align:center">
-        <span class="dot" onclick="currentSlide(1)"></span> 
-        <span class="dot" onclick="currentSlide(2)"></span> 
-        <span class="dot" onclick="currentSlide(3)"></span> 
-    </div> 
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+    </div>
 </div>
 <div style="background-color: #f5f5f7" class="pb-3">
     <div class="container">
@@ -195,9 +234,9 @@ img {vertical-align: middle;}
                             <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
                         </a>
                         <div class="details">
-                            <a asp-action="Details" 
-                            asp-route-id="@item.Id" 
-                            asp-controller="Products" >
+                            <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               asp-controller="Products">
                                 @item.Name
                             </a>
                             <div class="price">
@@ -219,10 +258,10 @@ img {vertical-align: middle;}
                 <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="7F9351B3-F8E3-4526-82B3-DEC7BAC5316E">Xem tất cả iPhone ❯</a>
             </div>
         </div>
-         <h1 class="d-flex justify-content-center title">iPad</h1>
-         <div class="row">
-             @foreach (var item in Model.Where(p => p.Menu.Name == "iPad").OrderByDescending(p => p.Created).Take(4))
-             {
+        <h1 class="d-flex justify-content-center title">iPad</h1>
+        <div class="row">
+            @foreach (var item in Model.Where(p => p.Menu.Name == "iPad").OrderByDescending(p => p.Created).Take(4))
+            {
                 <div class="col-md-3 col-6 item-box">
                     <div class="product-item">
                         <a asp-action="Details"
@@ -250,15 +289,15 @@ img {vertical-align: middle;}
                         </div>
                     </div>
                 </div>
-             }
-             <div class="show-all d-flex justify-content-center">
+            }
+            <div class="show-all d-flex justify-content-center">
                 <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="D59BB95E-8772-42E6-96F3-6087D67B3CF4">Xem tất cả iPad ❯</a>
-             </div>
-         </div>
-         <h1 class="d-flex justify-content-center title">Mac</h1>
-         <div class="row">
-             @foreach (var item in Model.Where(p => p.Menu.Name == "Mac").OrderByDescending(p => p.Created).Take(4))
-             {
+            </div>
+        </div>
+        <h1 class="d-flex justify-content-center title">Mac</h1>
+        <div class="row">
+            @foreach (var item in Model.Where(p => p.Menu.Name == "Mac").OrderByDescending(p => p.Created).Take(4))
+            {
                 <div class="col-md-3 col-6 item-box">
                     <div class="product-item">
                         <a asp-action="Details"
@@ -286,15 +325,15 @@ img {vertical-align: middle;}
                         </div>
                     </div>
                 </div>
-             }
-             <div class="show-all d-flex justify-content-center">
+            }
+            <div class="show-all d-flex justify-content-center">
                 <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="36C999A5-06E8-4A55-A32B-CA985D8894BB">Xem tất cả Mac ❯</a>
-             </div>
-         </div>
-         <h1 class="d-flex justify-content-center title">Watch</h1>
-         <div class="row">
-             @foreach (var item in Model.Where(p => p.Menu.Name == "Watch").OrderByDescending(p => p.Created).Take(4))
-             {
+            </div>
+        </div>
+        <h1 class="d-flex justify-content-center title">Watch</h1>
+        <div class="row">
+            @foreach (var item in Model.Where(p => p.Menu.Name == "Watch").OrderByDescending(p => p.Created).Take(4))
+            {
                 <div class="col-md-3 col-6 item-box">
                     <div class="product-item">
                         <a asp-action="Details"
@@ -322,11 +361,11 @@ img {vertical-align: middle;}
                         </div>
                     </div>
                 </div>
-             }
-             <div class="show-all d-flex justify-content-center">
+            }
+            <div class="show-all d-flex justify-content-center">
                 <a asp-action="GetByMenu" asp-controller="Products" asp-route-id="92312A61-CEA1-4153-8ADF-59E9A94AD8D5">Xem tất cả Watch ❯</a>
-             </div>
-         </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -335,30 +374,30 @@ img {vertical-align: middle;}
     showSlides(slideIndex);
 
     function plusSlides(n) {
-      showSlides(slideIndex += n);
+        showSlides(slideIndex += n);
     }
 
     function currentSlide(n) {
-      showSlides(slideIndex = n);
+        showSlides(slideIndex = n);
     }
 
     function showSlides(n) {
-      let i;
-      let slides = document.getElementsByClassName("mySlides");
-      let dots = document.getElementsByClassName("dot");
-      if (n > slides.length) {slideIndex = 1}    
-      if (n < 1) {slideIndex = slides.length}
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";  
-      }
-      for (i = 0; i < dots.length; i++) {
-        dots[i].className = dots[i].className.replace(" active", "");
-      }
-      slides[slideIndex-1].style.display = "block";  
-      dots[slideIndex-1].className += " active";
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
     }
 
-    setInterval(function() {
+    setInterval(function () {
         plusSlides(1);
     }, 2500);
 </script>

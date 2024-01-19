@@ -11,3 +11,16 @@ function getShoppingCart() {
         window.location.href = "/Cart";
     }
 }
+
+$(document).ready(function () {
+    $("#toggleButton").click(function () {
+        var dropdown = $("#dropdownMenu");
+
+        // Kiểm tra xem dropdown đã mở hay chưa
+        var isOpen = dropdown.hasClass("open");
+
+        // Thay đổi trạng thái của dropdown
+        dropdown.toggleClass("open", !isOpen);
+        dropdown.css("max-height", isOpen ? 0 : dropdown[0].scrollHeight + "px");
+    });
+});
