@@ -129,4 +129,11 @@ public static class AppExtentions
         });
         return services;
     }
+
+    public static IServiceCollection InjectAppServices(this IServiceCollection services)
+    {
+        services.AddScoped<PaymentServices>();
+        return services;
+    }
+
 }

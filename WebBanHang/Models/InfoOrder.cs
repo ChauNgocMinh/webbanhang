@@ -5,7 +5,7 @@ namespace WebBanHang.Models
 {
     public partial class InfoOrder
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public int? Status { get; set; }
         public bool? PaymentMethod { get; set; }
         public string? Name { get; set; }
@@ -15,7 +15,7 @@ namespace WebBanHang.Models
         public string? District { get; set; }
         public string? Address { get; set; }
         public double? Total { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime? Date { get; set; } = DateTime.Now;
 
         public virtual ICollection<OrderItem> OrderItems { get; set; } = null!;
     }

@@ -5,7 +5,7 @@ namespace WebBanHang.Models
 {
     public partial class OrderItem
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public Guid? ProductId { get; set; }
         public double? Price { get; set; }
         public int? Quantity { get; set; }

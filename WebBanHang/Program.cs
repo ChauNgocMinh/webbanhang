@@ -22,6 +22,8 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddAuthorizationPolicies();
 
+builder.Services.InjectAppServices();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
