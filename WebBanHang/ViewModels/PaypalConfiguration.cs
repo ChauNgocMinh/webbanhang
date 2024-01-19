@@ -3,43 +3,33 @@ using System;
 
 namespace WebBanHang.ViewModels
 {
-     public static class PaypalConfiguration
+    public static class PaypalConfiguration
     {
-        public static IConfiguration Configuration { get; set; }
-        public static readonly string ClientId;
-        public static readonly string ClientSecret;
-
-        static PaypalConfiguration()
+        public static Dictionary<string, string> GetConfig(string mode)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-            Configuration = builder.Build();
-
-            var paypalSettings = Configuration.GetSection("PayPal:Settings");
-            ClientId = paypalSettings["ClientId"];
-            ClientSecret = paypalSettings["ClientSecret"];
+            return new Dictionary<string, string>()
+            {
+                {"mode",mode}
+            };
         }
 
-        private static string GetAccessToken()
+        private static string GetAccessToken(string ClientId, string ClientSecret, string mode)
         {
-            string accessToken = new OAuthTokenCredential(ClientId, ClientSecret).GetAccessToken();
+            // getting accesstocken from paypal  
+            string accessToken = new OAuthTokenCredential(ClientId, ClientSecret, new Dictionary<string, string>()
+            {
+                {"mode",mode}
+            }).GetAccessToken();
             return accessToken;
         }
 
-        public static APIContext GetAPIContext()
+        public static APIContext GetAPIContext(string clientId, string clientSecret, string mode)
         {
-            APIContext apiContext = new APIContext(GetAccessToken());
-
-            // Convert IConfigurationSection to Dictionary<string, string>
-            Dictionary<string, string> configDictionary = new Dictionary<string, string>();
-            foreach (var item in Configuration.GetSection("PayPal:Settings").GetChildren())
+            // return apicontext object by invoking it with the accesstoken  
+            APIContext apiContext = new(GetAccessToken(clientId, clientSecret, mode))
             {
-                configDictionary[item.Key] = item.Value;
-            }
-            apiContext.Config = configDictionary;
-
+                Config = GetConfig(mode)
+            };
             return apiContext;
         }
 

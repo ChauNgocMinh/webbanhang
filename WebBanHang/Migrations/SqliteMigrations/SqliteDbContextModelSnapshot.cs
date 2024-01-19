@@ -328,6 +328,24 @@ namespace WebBanHang.Migrations.SqliteMigrations
                     b.ToTable("DetailRom", (string)null);
                 });
 
+            modelBuilder.Entity("WebBanHang.Models.Image", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("IdProduct")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Img")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdProduct");
+
+                    b.ToTable("Image", (string)null);
+                });
+
             modelBuilder.Entity("WebBanHang.Models.InfoOrder", b =>
                 {
                     b.Property<Guid>("Id")
@@ -366,7 +384,7 @@ namespace WebBanHang.Migrations.SqliteMigrations
                     b.Property<int?>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<float?>("Total")
+                    b.Property<double?>("Total")
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
@@ -570,6 +588,16 @@ namespace WebBanHang.Migrations.SqliteMigrations
                     b.Navigation("IdRomNavigation");
                 });
 
+            modelBuilder.Entity("WebBanHang.Models.Image", b =>
+                {
+                    b.HasOne("WebBanHang.Models.Product", "IdProductNavigation")
+                        .WithMany("Images")
+                        .HasForeignKey("IdProduct")
+                        .HasConstraintName("FK_Image_Product");
+
+                    b.Navigation("IdProductNavigation");
+                });
+
             modelBuilder.Entity("WebBanHang.Models.OrderItem", b =>
                 {
                     b.HasOne("WebBanHang.Models.InfoOrder", "InfoOrder")
@@ -627,6 +655,8 @@ namespace WebBanHang.Migrations.SqliteMigrations
                     b.Navigation("DetailColors");
 
                     b.Navigation("DetailRoms");
+
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("WebBanHang.Models.Rom", b =>

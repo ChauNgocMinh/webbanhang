@@ -196,11 +196,11 @@
                         </span>
                         <div class="row">
                             <div class="radio-container" style="width: 49%">
-                                <input type="radio" id="option1" name="options" class="radio-input">
+                                <input type="radio" id="paypal" name="options" class="radio-input">
                                 <label for="option1" class="radio-label">Thanh toán Paypal</label>
                             </div>
                             <div class="radio-container" style="width: 49%">
-                                <input type="radio" id="option2" name="options" class="radio-input">
+                                <input type="radio" id="vnpay" name="options" class="radio-input">
                                 <label for="option2" class="radio-label">Thanh toán VN Pay</label>
                             </div>
                         </div>
@@ -225,7 +225,7 @@
                         </div>
                     </div>
                     <div>
-                        <button onclick="Buy()" class="d-flex justify-content-center align-items-center" style="border: none; background-color: #0066cc; padding: 10px 20px; font-size: 16px; color: #fff; border-radius: 8px;  height: 48px; font-size: 14px; width: 100%">
+                        <button onclick="proceedPayment()" class="d-flex justify-content-center align-items-center" style="border: none; background-color: #0066cc; padding: 10px 20px; font-size: 16px; color: #fff; border-radius: 8px;  height: 48px; font-size: 14px; width: 100%">
                             Tiến hành đặt hàng
                         </button>
                     </div>
@@ -259,6 +259,56 @@
         });
         populateDistricts($("#province").val());
     });
+
+    function proceedPayment() {
+        let paymentType = -1;
+        if (document.getElementById("vnpay").checked) {
+            paymentType = 1;
+        } else if(document.getElementById("paypal").checked) {
+            paymentType = 2;
+        }
+
+        var orderViewModel = {
+            InfoOrder: {
+                Status: 1,
+                PaymentMethod: true, // Example value
+                Name: $("#Name").val(),
+                Phone: $("#Phone").val(),
+                Email: $("#Email").val(),
+                City: $("#province").val(),
+                District: $("#district").val(),
+                Address: $("#Address").val(),
+                Total: @x
+            },
+            OrderItem: []
+        };
+
+        @foreach (var item in Model.CartItems)
+        {
+            <text>
+                orderViewModel.OrderItem.push({
+                    ProductId: "@item.ProductId",
+                    Price: @item.Price,
+                    Quantity: @item.Quantity,
+                    ProductName: "@item.ProductName",
+                    Image: "@item.Image",
+                });
+            </text>
+        }
+
+        $.ajax({
+            type: "POST",
+            url: `/Order/ProceedPayment?paymentType=${paymentType}&cartId=${localStorage.getItem("Cart Id")}`,
+            data: orderViewModel,  
+            success: function (result) {
+                window.location.href = result;
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+                console.log(errorThrown);
+            }
+        });
+    }
 
     function Buy(){
         console.log("Button clicked");
@@ -296,7 +346,6 @@
             url: "/Order/Buy?CartId=" + localStorage.getItem("Cart Id"),
             data: orderViewModel,  
             success: function (result) {
-                console.log(result);
                 window.location.href = result;
             },
         });
