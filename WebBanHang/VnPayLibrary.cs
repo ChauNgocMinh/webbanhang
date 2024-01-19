@@ -48,7 +48,7 @@ public class VnPayLibrary
 
         var vnp_SecureHash = Utils.HmacSHA512(vnp_HashSecret, queryString);
 
-        baseUrl += $"vnp_SecureHash={vnp_SecureHash}";
+        baseUrl += $"&vnp_SecureHash={vnp_SecureHash}";
 
         return baseUrl;
     }
