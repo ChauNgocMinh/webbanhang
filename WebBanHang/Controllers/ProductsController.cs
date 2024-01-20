@@ -23,7 +23,7 @@ public class ProductsController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var products = _context.Products.Include(p => p.Menu);
+        var products = _context.Products.OrderByDescending(p => p.Created).Include(p => p.Menu);
         return View(await products.ToListAsync());
     }
 
@@ -44,7 +44,6 @@ public class ProductsController : Controller
             return NotFound();
         }
 
-
         if (IdRom == null)
         {
             var Rom = await _context.DetailRoms
@@ -62,13 +61,14 @@ public class ProductsController : Controller
                 .FirstOrDefaultAsync();
             IdColor = Color?.IdColor;
         }
-        var color = await _context.DetailRoms.ToListAsync();
-        if (product == null)
-        {
-            return NotFound();
-        }
+        var newProducts = await _context.Products
+                                        .Where(x => x.MenuId == product.MenuId)
+                                        .OrderByDescending(p => p.Created)
+                                        .Take(4)
+                                        .ToListAsync();
         ViewBag.IdRom = IdRom;
         ViewBag.IdColor = IdColor;
+        ViewBag.NewProducts = newProducts;
         return View(product);
     }
 
@@ -244,12 +244,22 @@ public class ProductsController : Controller
             return RedirectToAction("Index");
         }
     }
-
+    [AllowAnonymous]
     public async Task<IActionResult> GetByMenu(string id)
     {
         ViewBag.MenuId = id;
         var products = _context.Products.Include(p => p.Menu)
-            .Where(p => p.Menu!.Id.ToString() == id);
+            .Where(p => p.Menu!.Id.ToString() == id)
+            .OrderByDescending(p => p.Created);
+        ViewBag.MenuName = _context.Menus.FirstOrDefault(m => m.Id.ToString() == id)?.Name;
+        return View(await products.ToListAsync());
+    }
+    public async Task<IActionResult> GetByMenuAdmin(string id)
+    {
+        ViewBag.MenuId = id;
+        var products = _context.Products.Include(p => p.Menu)
+            .Where(p => p.Menu!.Id.ToString() == id)
+            .OrderByDescending(p => p.Created);
         ViewBag.MenuName = _context.Menus.FirstOrDefault(m => m.Id.ToString() == id)?.Name;
         return View(await products.ToListAsync());
     }

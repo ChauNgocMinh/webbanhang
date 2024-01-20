@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<WebBanHang.Models.Product>
 
 @{
-    ViewData["Title"] = "Product Index";
+    var Menu = Model.First(x => true).Menu.Name;
+    ViewData["Title"] = Menu;
 }
 <style>
     .back-link{

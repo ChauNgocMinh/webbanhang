@@ -58,7 +58,7 @@
     }
 </style>
 
-<div class="container mt-4">
+<div class="container" style="padding-top: 20px">
     <div class="search-container">
         <form asp-action="Search" method="post">
             <div class="input-group">
@@ -92,7 +92,7 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
                     <td><img src="~/image/Product/@item.Image" alt="@item.Name" /></td>
-                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@item.Price.ToString("#,0")₫</td>
                     <td>@Html.DisplayFor(modelItem => item.Menu.Name)</td>
                     <td class="action-links">
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>

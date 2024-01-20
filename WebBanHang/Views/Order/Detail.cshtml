@@ -1,0 +1,168 @@
+﻿@model WebBanHang.Models.InfoOrder
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+}
+
+<style>
+
+    table {
+        width: 100%;
+    }
+
+    table tr th {
+        border-style: none !important;
+        font-weight: 700;
+        font-size: 15px;
+        color: #1D1D1F;
+        padding: 16px 16px;
+    }
+
+    table tr td {
+        padding: 20px 16px;
+    }
+
+    .order-details-container {
+        margin: 30px auto;
+        max-width: 600px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .attribute-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    .attribute-table th,
+    .attribute-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .attribute-table th {
+        background-color: #f2f2f2;
+    }
+
+    .back-button {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+        .back-button a {
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+            .back-button a:hover {
+                background-color: #0056b3;
+            }
+</style>
+
+<div class="container" style="padding: 20px 0">
+    <h2 class="order-details-title">Chi tiết đơn hàng</h2>
+    <table class="attribute-table">
+        <thead>
+            <tr>
+                <th>Tên thuộc tính</th>
+                <th>Thuộc tính</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Phương thức thanh toán</td>
+                <td>
+                    @if (Model.PaymentMethod)
+                    {
+                        <span>VN Pay</span>
+                    }
+                    else
+                    {
+                        <span>Paypal</span>
+                    }
+                </td>
+            </tr>
+
+            <tr>
+                <td>Tên người mua</td>
+                <td>@Model.Name</td>
+            </tr>
+
+            <tr>
+                <td>Số điện thoại</td>
+                <td>@Model.Phone</td>
+            </tr>
+
+            <tr>
+                <td>Email</td>
+                <td>@Model.Email</td>
+            </tr>
+
+            <tr>
+                <td>Tỉnh/thành phố</td>
+                <td>@Model.City</td>
+            </tr>
+
+            <tr>
+                <td>Quận/huyện</td>
+                <td>@Model.District</td>
+            </tr>
+
+            <tr>
+                <td>Địa chỉ</td>
+                <td>@Model.Address</td>
+            </tr>
+
+            <tr>
+                <td>Tổng tiền</td>
+                <td style="font-weight: bold">@Model.Total.ToString("#,0")₫</td>
+            </tr>
+
+            <tr>
+                <td>Thời gian đặt hàng</td>
+                <td>@Model.Date.ToString("H:mm d/M/yyyy")</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="additional-row">
+                        <table class="attribute-table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Hình ảnh</th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Giá bán</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <tr style="border: 1px solid #ddd;">
+                                        <td style="border: none"><img style="height: 80px; width: 64px;" src="~/image/Product/@item.Image" alt="@item.Image" /></td>
+                                        <td style="border-style: none !important; font-weight: 700; font-size: 15px; color: #1D1D1F; min-height: 0px;">@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                        <td style="border-style: none !important; font-weight: 700; font-size: 15px; color: #1D1D1F; min-height: 0px;">@item.Quantity</td>
+                                        <td style="border-style: none !important; font-weight: 700; font-size: 15px; color: #1D1D1F; min-height: 0px;">@item.Price.ToString("#,0")₫</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="back-button">
+        <a asp-action="Index">Trở về</a>
+    </div>
+</div>
+
+

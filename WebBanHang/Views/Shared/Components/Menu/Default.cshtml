@@ -6,7 +6,7 @@
     <ul class="dropdown-menu" aria-labelledby="MenuDropdowm">
         @foreach (var menu in Model)
         {
-            <li><a class="dropdown-item" asp-action="GetByMenu" asp-route-id="@menu.Id">@menu.Name</a></li>
+            <li><a class="dropdown-item" asp-action="GetByMenuAdmin" asp-route-id="@menu.Id">@menu.Name</a></li>
         }
     </ul>
 </div>

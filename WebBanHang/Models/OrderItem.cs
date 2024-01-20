@@ -7,7 +7,7 @@ namespace WebBanHang.Models
     {
         public Guid Id { get; set; } = Guid.NewGuid();
         public Guid? ProductId { get; set; }
-        public double? Price { get; set; }
+        public double Price { get; set; }
         public int? Quantity { get; set; }
         public string ProductName { get; set; } = null!;
         public string Image { get; set; } = null!;

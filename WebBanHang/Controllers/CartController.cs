@@ -23,8 +23,41 @@ public class CartController : Controller
 
         var cart = await _context.Carts.Include(c => c.CartItems)
             .FirstOrDefaultAsync(c => c.Id == Id) ?? new Cart();
-
+        ViewBag.IdCart = Id;
         return View(cart);
+    }
+    [HttpGet]
+    public async Task<IActionResult> ChangeNumber(Guid Id, int number, Guid IdCart)
+    {
+        var cartItem = _context.CartItems.Where(c => c.Id == Id).FirstOrDefault();
+        var product = _context.Products.Where(c => c.Id == cartItem.ProductId).FirstOrDefault();
+
+        cartItem.Quantity += number;
+        if(cartItem.Quantity == 0)
+        {
+            _context.Remove(cartItem);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index), new { Id = IdCart });
+        }
+
+        if(number == 1)
+        {
+            cartItem.Price += product.Price;
+        }
+        else
+        {
+            cartItem.Price -= product.Price;
+        }
+        await _context.SaveChangesAsync();  
+        return RedirectToAction(nameof(Index),new { Id = IdCart });
+    }
+    [HttpGet]
+    public async Task<IActionResult> DeleteItem(Guid Id, Guid IdCart)
+    {
+        var cartItem = _context.CartItems.Where(c => c.Id == Id).FirstOrDefault();
+        _context.Remove(cartItem);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpPost]

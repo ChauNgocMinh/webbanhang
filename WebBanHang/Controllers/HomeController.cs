@@ -19,5 +19,9 @@ namespace WebBanHang.Controllers
             
             return View(await products.ToListAsync());
         }
+        public async Task<IActionResult> Login()
+        {
+            return View();
+        }
     }
 }

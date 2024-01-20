@@ -2,9 +2,11 @@
 @{
     Guid? IdRom = ViewBag.IdRom;
     Guid? IdColor = ViewBag.IdColor;
+    var Products = ViewBag.NewProducts;
     var x = new double?();
     string nameRom = "";
     string nameColor = "";
+    ViewData["Title"] = Model.Name;
 }
 <style>
     .back-link {
@@ -13,10 +15,10 @@
         font-size: 13px;
     }
 
-        .back-link a {
-            margin: 0 5px;
-            color: #515154;
-        }
+    .back-link a {
+        margin: 0 5px;
+        color: #515154;
+    }
 
     .product_info_container {
         display: flex;
@@ -328,126 +330,37 @@
     <div>
         <strong>Sản phẩm tương tự</strong>
         <div class="row">
-            <div class="col-md-3 col-6 item-box">
-                <div class="product-item">
-                    <a asp-action="Details"
-                       asp-route-id="@Model.Id"
-                       asp-controller="Products"
-                       asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
-                       asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
-                        <img style="width: 100%; height: auto" src="~/image/Product/@Model.Image" alt="@Model.Name" />
-                    </a>
-                    <div class="details">
+            @foreach (var item in Products)
+            {
+                <div class="col-md-3 col-6 item-box">
+                    <div class="product-item">
                         <a asp-action="Details"
-                           asp-route-id="@Model.Id"
-                           asp-controller="Products"
-                           asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
-                           asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
-                            @Model.Name
+                           asp-route-id="@item.Id"
+                           asp-controller="Products">
+                            <img style="width: 100%; height: auto" src="~/image/Product/@item.Image" alt="@item.Name" />
                         </a>
-                        <div class="price">
-                            <span style="color: #0066CC; font-size: 13px;">@Model.Price.ToString("#,0")₫</span>
-                            @if (Model.OldPrice != null)
-                            {
-                                double oldPrice = double.Parse(Model.OldPrice?.ToString());
-                                double discountPercentage = (oldPrice - Model.Price) / Model.OldPrice.Value * 100;
-                                int discountPercentageInteger = Convert.ToInt32(discountPercentage);
-                                <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
-                            }
+                        <div class="details">
+                            <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               asp-controller="Products">
+                                @item.Name
+                            </a>
+                            <div class="price">
+                                <span style="color: #0066CC; font-size: 13px;">@item.Price.ToString("#,0")₫</span>
+                                @* @if (item.OldPrice != null)
+                                {
+                                    double oldPrice = double.Parse(item.OldPrice?.ToString());
+                                    double discountPercentage = (oldPrice - item.Price) / item.OldPrice.Value * 100;
+                                    int discountPercentageInteger = Convert.ToInt32(discountPercentage);
+                                    <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
+                                } *@
+                                <span class="old-price" style="text-decoration: line-through;">@item.OldPrice?.ToString("#,0")₫</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3 col-6 item-box">
-                <div class="product-item">
-                    <a asp-action="Details"
-                       asp-route-id="@Model.Id"
-                       asp-controller="Products"
-                       asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
-                       asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
-                        <img style="width: 100%; height: auto" src="~/image/Product/@Model.Image" alt="@Model.Name" />
-                    </a>
-                    <div class="details">
-                        <a asp-action="Details"
-                           asp-route-id="@Model.Id"
-                           asp-controller="Products"
-                           asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
-                           asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
-                            @Model.Name
-                        </a>
-                        <div class="price">
-                            <span style="color: #0066CC; font-size: 13px;">@Model.Price.ToString("#,0")₫</span>
-                            @if (Model.OldPrice != null)
-                            {
-                                double oldPrice = double.Parse(Model.OldPrice?.ToString());
-                                double discountPercentage = (oldPrice - Model.Price) / Model.OldPrice.Value * 100;
-                                int discountPercentageInteger = Convert.ToInt32(discountPercentage);
-                                <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 item-box">
-                <div class="product-item">
-                    <a asp-action="Details"
-                       asp-route-id="@Model.Id"
-                       asp-controller="Products"
-                       asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
-                       asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
-                        <img style="width: 100%; height: auto" src="~/image/Product/@Model.Image" alt="@Model.Name" />
-                    </a>
-                    <div class="details">
-                        <a asp-action="Details"
-                           asp-route-id="@Model.Id"
-                           asp-controller="Products"
-                           asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
-                           asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
-                            @Model.Name
-                        </a>
-                        <div class="price">
-                            <span style="color: #0066CC; font-size: 13px;">@Model.Price.ToString("#,0")₫</span>
-                            @if (Model.OldPrice != null)
-                            {
-                                double oldPrice = double.Parse(Model.OldPrice?.ToString());
-                                double discountPercentage = (oldPrice - Model.Price) / Model.OldPrice.Value * 100;
-                                int discountPercentageInteger = Convert.ToInt32(discountPercentage);
-                                <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6 item-box">
-                <div class="product-item">
-                    <a asp-action="Details"
-                       asp-route-id="@Model.Id"
-                       asp-controller="Products"
-                       asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
-                       asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
-                        <img style="width: 100%; height: auto" src="~/image/Product/@Model.Image" alt="@Model.Name" />
-                    </a>
-                    <div class="details">
-                        <a asp-action="Details"
-                           asp-route-id="@Model.Id"
-                           asp-controller="Products"
-                           asp-route-IdRom="2F8E3D9A-AE94-4A0E-8F5A-A8C88060D4FD"
-                           asp-route-IdColor="CAD1691B-450D-4A91-9EE7-BBB2ECCD3809">
-                            @Model.Name
-                        </a>
-                        <div class="price">
-                            <span style="color: #0066CC; font-size: 13px;">@Model.Price.ToString("#,0")₫</span>
-                            @if (Model.OldPrice != null)
-                            {
-                                double oldPrice = double.Parse(Model.OldPrice?.ToString());
-                                double discountPercentage = (oldPrice - Model.Price) / Model.OldPrice.Value * 100;
-                                int discountPercentageInteger = Convert.ToInt32(discountPercentage);
-                                <span class="old-price" style="text-decoration: line-through;">@Model.OldPrice?.ToString("#,0")₫</span>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
+            
         </div>
     </div>
 </div>
