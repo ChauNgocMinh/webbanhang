@@ -4,11 +4,38 @@
     ViewData["Title"] = "Create Product";
 }
 
-<div class="container mt-4">
-    <h2>Tạo Sản Phẩm Mới</h2>
+<style>
 
-    <div class="row">
-        <div class="col-md-6">
+    .form-container {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+</style>
+
+<div class="container" style="padding-top: 20px">
+    <div class="row justify-content-center">
+        <div class="col-md-6 form-container">
             <form asp-action="Create" enctype="multipart/form-data" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -37,7 +64,7 @@
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
 
-                 <div class="form-group">
+                <div class="form-group">
                     <label asp-for="OldPrice" class="control-label">Giá cũ</label>
                     <input asp-for="OldPrice" class="form-control" />
                     <span asp-validation-for="OldPrice" class="text-danger"></span>
@@ -56,7 +83,7 @@
         </div>
     </div>
 
-    <div class="mt-2">
+    <div class="mt-2 d-flex justify-content-center" >
         <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
     </div>
 </div>

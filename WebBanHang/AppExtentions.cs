@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebBanHang.Migrations.Seeding;
 using WebBanHang.Models;
@@ -136,4 +136,14 @@ public static class AppExtentions
         return services;
     }
 
+    public static IServiceCollection ConfigureServices(IServiceCollection services)
+    {
+        services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian sống của Session là 30 phút
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
+        return services;
+    }
 }

@@ -209,9 +209,6 @@
                         <li class="nav-item">
                             <a class="nav-link">Dịch vụ</a>
                         </li>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                        }
                     </ul>
                     <ul class="navbar-nav">
                         @if (SignInManager.IsSignedIn(User))
@@ -253,7 +250,7 @@
                                 </a>
                             </li>
                             <li class="nav-item user-dropdown">
-                                <a class="nav-link user-dropdown-toggle" title="Đăng nhập vào hệ thống" asp-controller="Admin" asp-action="Login">
+                                <a class="nav-link user-dropdown-toggle" title="Đăng nhập vào hệ thống" asp-controller="Home" asp-action="Login">
                                     <i style="color: white" class="fa-regular fa-user"></i>
                                 </a>
                             </li>
@@ -264,7 +261,7 @@
                 <div class="collapseShow">
                     <ul class="navbar-nav">
                         <li class="">
-                            <a style="text-decoration: none; color: #212529;" class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">
+                            <a style="text-decoration: none; color: #212529;" class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index" method="post">
                                 <i style="color: white; font-size: 17px" class="fa-solid fa-cart-shopping"></i>
                             </a>
                         </li>

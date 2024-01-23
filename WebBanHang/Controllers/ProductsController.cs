@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PayPal.Api;
 using WebBanHang.Models;
 using WebBanHang.ViewModels;
 
@@ -116,6 +117,7 @@ public class ProductsController : Controller
                                     .ThenInclude(dr => dr.IdRomNavigation)
                                     .Include(x => x.DetailColors)
                                     .ThenInclude(xx => xx.IdColorNavigation)
+                                    .Include(img => img.Images)
                                     .FirstOrDefaultAsync(m => m.Id == id);
 
         if (product == null)
@@ -125,7 +127,8 @@ public class ProductsController : Controller
 
         ViewData["MenuName"] = new SelectList(_context.Menus, "Id", "Name", product.MenuId);
 
-        return View(new EditProductViewModel
+        //return View(product);
+        var editProductViewModel = new EditProductViewModel
         {
             ProductId = product.Id,
             Name = product.Name,
@@ -133,22 +136,21 @@ public class ProductsController : Controller
             Price = product.Price,
             OldPrice = product.OldPrice,
             MenuId = product.MenuId,
-            OldImage = $"/Image/Product/{product.Image!}"
-        });
+            OldImage = $"/Image/Product/{product.Image!}",
+            Images = product.Images.Select(image => new WebBanHang.Models.Image
+            {
+                Id = image.Id,
+                Img = image.Img,
+            }).ToList()
+        };
+        return View(editProductViewModel); 
     }
 
-    // POST: Products/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     public async Task<IActionResult> Edit(EditProductViewModel viewModel)
     {
-        if (!ModelState.IsValid)
-            // TODO: ADD error for model state
-            return RedirectToAction("Edit");
-
-        var product = await _context.Products
-            .FirstOrDefaultAsync(p => p.Id == viewModel.ProductId);
+        var product = _context.Products
+            .Where(p => p.Id == viewModel.ProductId).FirstOrDefault();
 
         if (product == null)
         {
@@ -281,4 +283,46 @@ public class ProductsController : Controller
             return RedirectToAction("Index");
         }
     }
+    [HttpPost]
+    public async Task<IActionResult> AddImages(Guid Id, IFormFile imageFile)
+    {
+        var img = new WebBanHang.Models.Image
+        {
+            Id = Guid.NewGuid(),
+            IdProduct = Id
+        };
+        string uniqueFileName = $"{img.Id}_{Path.GetExtension(imageFile.FileName)}";
+        img.Img = uniqueFileName;
+        string fileSavePath = Path.Combine(_webHost.WebRootPath, "image", "Product", uniqueFileName);
+        _context.Images.Add(img);
+        using (var stream = new FileStream(fileSavePath, FileMode.Create))
+        {
+            await imageFile.CopyToAsync(stream);
+        }
+        await _context.SaveChangesAsync();
+        return Ok();
+    }
+    [HttpGet]
+    public async Task<IActionResult> DeleteImage(Guid Id)
+    {
+        var image = _context.Images.Where(x => x.Id == Id).FirstOrDefault();
+
+        if (image == null)
+        {
+            return NotFound();
+        }
+        string filePath = Path.Combine(_webHost.WebRootPath, "image", "Product", image.Img);
+        if (System.IO.File.Exists(filePath))
+        {
+            System.IO.File.Delete(filePath);
+        }
+
+        _context.Images.Remove(image);
+
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Edit", new { id = image.IdProduct });
+
+    }
+
+
 }

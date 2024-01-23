@@ -17,7 +17,7 @@ public class CartController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(Guid? Id)
+    public async Task<IActionResult> Index( Guid? Id)
     {
         if (Id == null) return View(new Cart());
 

@@ -84,20 +84,27 @@
                                 <span asp-validation-for="Number" class="text-danger"></span>
                             </td>
                         </tr>
-                        @* <tr>
-                            <th scope="row">Màu sắc</th>
+                        <tr>
+                            <th scope="row">Hình ảnh thêm</th>
                             <td>
-                                <input asp-for="Number" class="form-control" />
-                                <span asp-validation-for="Number" class="text-danger"></span>
+                                <label asp-for="ImageFile" class="control-label">Ảnh hiện có</label>
+                                <div>
+                                    @foreach (var item in Model.Images)
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <img id="imgPreview" class="img-thumbnail img-preview" style="height: 80px; width: 64px;" src="/image/Product/@item.Img" alt="" srcset="">
+                                            <a asp-action="DeleteImage" asp-route-Id=@item.Id class="btn" style="background: red">x</a>
+                                        </div>
+                                    }
+                                </div>
+                                <label asp-for="ImageFile" class="control-label">Thêm ảnh mới</label>
+                                <div class="d-flex">
+                                    <input id="imageFile" type="file" class="form-control" />
+                                    <span id="validationError" class="text-danger"></span>
+                                    <a href="#" class="btn" id="addImagesBtn">+</a>
+                                </div>
                             </td>
                         </tr>
-                        <tr>
-                            <th scope="row">Bộ nhớ trong</th>
-                            <td>
-                                <input asp-for="Number" class="form-control" />
-                                <span asp-validation-for="Number" class="text-danger"></span>
-                            </td>
-                        </tr> *@
                     </tbody>
                 </table>
 
@@ -126,5 +133,36 @@
                 imgPreview.src = URL.createObjectURL(file);
             }
         };
+
+        $(document).ready(function () {
+            $("#addImagesBtn").click(function (e) {
+                e.preventDefault();
+
+                var imageFile = $("#imageFile")[0].files[0];
+                if (!imageFile) {
+                    $("#validationError").text("Please choose an image file.");
+                    return;
+                }
+                var productId = "@Model.ProductId";
+
+                var formData = new FormData();
+                formData.append("Id", productId);
+                formData.append("ImageFile", imageFile);
+
+                $.ajax({
+                    url: "@Url.Action("AddImages", "Products")",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function () {
+                        window.location.href = "/Products/Edit/" + productId + "";
+                    },
+                    error: function (error) {
+                        // Xử lý lỗi
+                    }
+                });
+            });
+        });
     </script>
 }

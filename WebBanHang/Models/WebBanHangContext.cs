@@ -25,6 +25,7 @@ public abstract class WebBanHangContext : IdentityDbContext<AppUser, AppRole, st
     public DbSet<Rom> Roms { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<Image> Images { get; set; }
     public virtual DbSet<InfoOrder> InfoOrders { get; set; } = null!;
     public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
 

@@ -61,7 +61,7 @@ public class PaymentServices
         //it is returned by the create function call of the payment class  
         // Creating a payment  
         // baseURL is the url on which paypal sendsback the data.
-        var baseURI = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.PathBase}/User/PaymentWithPayPal?";
+        var baseURI = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.PathBase}/Order/PaymentWithPayPal?";
         //here we are generating guid for storing the paymentID received in session  
         //which will be used in the payment execution  
         var guid = Convert.ToString(new Random().Next(100000));

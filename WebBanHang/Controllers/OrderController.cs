@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PayPal.Api;
 using System.Configuration;
@@ -26,12 +27,8 @@ namespace WebBanHang.Controllers
         [HttpPost]
         public async Task<IActionResult> ProceedPayment(int paymentType, OrderViewModel model, Guid cartId)
         {
-            if (paymentType == -1)
-            {
-                return BadRequest("Payment not selected");
-            }
 
-            var infoOrder = new InfoOrder   
+            InfoOrder infoOrder = new InfoOrder   
             {
                 Status = 1,
                 PaymentMethod = Convert.ToBoolean(paymentType),
@@ -53,17 +50,14 @@ namespace WebBanHang.Controllers
                     Image = item.Image,
                 }).ToList()
             };
-
-            _context.InfoOrders.Add(infoOrder);
-
-            await _context.SaveChangesAsync();
+            HttpContext.Session.SetObject("TempOrder", infoOrder);
 
             if (paymentType == 1)
             {
                 return Ok(_paymentServices.CreateVNPAYRequestURL(
                     model,
                     $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}{Url.Action("AfterPayment", "Order", new { cartId })!}",
-                    "127.0.0.1",
+                    "magicprotech.com",
                     "NCB",
                     Guid.NewGuid()
                     )
@@ -71,25 +65,26 @@ namespace WebBanHang.Controllers
             }
             else
             {
-                return await PaymentWithPaypal(model);
+                return await PaymentWithPaypal(cartId, model);
             }
         }
         //Xóa item trong giỏ hàng
         [HttpGet]
         public async Task<IActionResult> AfterPayment(Guid cartId)
         {
-            var CartItem = await _context.CartItems.FirstOrDefaultAsync(c => c.CartId == cartId);
+            var CartItem = await _context.CartItems.Where(c => c.CartId == cartId).ToListAsync();
 
             if (CartItem != null)
             {
-                _context.Remove(CartItem);
+                _context.RemoveRange(CartItem);
             }
+            InfoOrder infoOrder = HttpContext.Session.GetObject<InfoOrder>("TempOrder");
 
+            _context.InfoOrders.Add(infoOrder);
             await _context.SaveChangesAsync();
-
             return RedirectToAction("Index", "Home");
         }
-
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var order = await _context.InfoOrders.Select(o => new InfoOrder
@@ -109,7 +104,43 @@ namespace WebBanHang.Controllers
             }).OrderByDescending(p => p.Date).ToListAsync();
             return View(order);
         }
-         public async Task<IActionResult> Detail(Guid Id)
+
+        [HttpPost]
+        public async Task<IActionResult> FilterData(DateTime? filterDate)
+        {
+            IQueryable<InfoOrder> query = _context.InfoOrders;
+
+            if (filterDate.HasValue)
+            {
+                DateTime startDate = filterDate.Value.Date;
+                DateTime endDate = filterDate.Value.Date.AddDays(1);
+
+                query = query.Where(o => o.Date >= startDate && o.Date < endDate);
+            }
+
+            var orders = await query
+                .Select(o => new InfoOrder
+                {
+                    Id = o.Id,
+                    Status = o.Status,
+                    PaymentMethod = o.PaymentMethod,
+                    Name = o.Name,
+                    Phone = o.Phone,
+                    Email = o.Email,
+                    City = o.City,
+                    District = o.District,
+                    Address = o.Address,
+                    Total = (float)o.Total,
+                    Date = o.Date,
+                    OrderItems = o.OrderItems
+                })
+                .OrderByDescending(p => p.Date)
+                .ToListAsync();
+
+            return View(orders);
+        }
+
+        public async Task<IActionResult> Detail(Guid Id)
         {
             var order = _context.InfoOrders.Where(x => x.Id == Id).Include(c => c.OrderItems).FirstOrDefault();
 
@@ -118,7 +149,7 @@ namespace WebBanHang.Controllers
 
 
         [NonAction]
-        public async Task<IActionResult> PaymentWithPaypal(OrderViewModel model)
+        public async Task<IActionResult> PaymentWithPaypal(Guid cartId, OrderViewModel model)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -142,13 +173,13 @@ namespace WebBanHang.Controllers
                     //it is returned by the create function call of the payment class  
                     // Creating a payment  
                     // baseURL is the url on which paypal sendsback the data.  
-                    string baseURI = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}/User/PaymentWithPayPal?";
+                    string baseURI = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}/Order/AfterPayment?";
                     //here we are generating guid for storing the paymentID received in session  
                     //which will be used in the payment execution  
                     var guid = Convert.ToString((new Random()).Next(100000));
                     //CreatePayment function gives us the payment approval url  
                     //on which payer is redirected for paypal account payment  
-                    var createdPayment = this.CreatePayment(apiContext, baseURI + "guid=" + guid, model);
+                    var createdPayment = this.CreatePayment(apiContext, baseURI + "cartId=" + cartId, model);
                     //get links returned from paypal in response to Create function call  
                     var links = createdPayment.links.GetEnumerator();
                     string paypalRedirectUrl = null;
@@ -177,16 +208,16 @@ namespace WebBanHang.Controllers
                     //If executed payment failed then we will show payment failure message to user  
                     if (executedPayment.state.ToLower() != "approved")
                     {
-                        return Ok(new { success = false, message = "Đặt hàng không thành công" });
+                        return Ok("/Cart?Id=" + cartId);
                     }
                 }
             }
             catch (Exception ex)
             {
-                return Ok(new { success = false, message = "Đặt hàng không thành công" });
+                return Ok("/Cart?Id=" + cartId);
             }
             //on successful payment, show success page to user.  
-            return Ok(new { success = true, message = "Đặt hàng thành công" });
+            return Ok("/Cart?Id=" + cartId);
         }
         private PayPal.Api.Payment payment;
         private Payment ExecutePayment(APIContext apiContext, string payerId, string paymentId)
